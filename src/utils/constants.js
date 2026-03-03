@@ -1,0 +1,17 @@
+export const BOOK_ID_KEY = 'fanqie-bookId';
+export const DIRECTORY_CACHE_KEY = 'fanqie-directory';
+export const CHAPTER_CACHE_KEY = 'fanqie-chapter';
+export const DETAIL_CACHE_KEY = 'fanqie-detail';
+export const API_BASE_KEY = 'fanqie-api-base';
+export const LAST_READ_CHAPTERS_KEY = 'fanqie-lastChapters';
+export const FONT_SIZE_KEY = 'fanqie-fontSize';
+export const FONT_SIZE_MIN = 18;
+export const FONT_SIZE_MAX = 48;
+export const FONT_SIZE_DEFAULT = 32;
+export const FONT_SIZE_STEP = 2;
+export const TRADITIONAL_CHINESE_KEY = 'fanqie-traditionalChinese';
+export const TEXT_BRIGHTNESS_KEY = 'fanqie-textBrightness';
+export const TEXT_BRIGHTNESS_MIN = 35;
+export const TEXT_BRIGHTNESS_MAX = 100;
+export const TEXT_BRIGHTNESS_DEFAULT = 55;
+export const TEXT_BRIGHTNESS_STEP = 5;
