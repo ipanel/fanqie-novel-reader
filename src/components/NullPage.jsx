@@ -56,7 +56,7 @@ const Subtitle = styled.p`
   font-size: 16px;
   color: var(--text-color-secondary);
   max-width: 400px;
-  line-height: 1.5;
+  line-height: 0.8;
   margin: 0;
 `;
 
@@ -368,6 +368,30 @@ const HelpCard = styled.div`
       font-weight: bold;
     }
   }
+
+  a.link-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: 12px;
+    background-color: var(--accent-color);
+    color: #000;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    align-self: flex-start;
+
+    &:hover {
+      background-color: var(--accent-hover);
+      transform: scale(1.02);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
 `;
 
 function NullPage() {
@@ -430,7 +454,8 @@ function NullPage() {
     <NullPageWrapper>
       <Header>
         <Title>番茄小說閱讀器</Title>
-        <Subtitle>簡單、乾淨、無廣告的沉浸式小說閱讀體驗</Subtitle>
+        <Subtitle>本地儲存、免註冊、免登入、無廣告</Subtitle>
+        <Subtitle>無需中國大陸手機號即可閱讀番茄小說</Subtitle>
       </Header>
 
       {savedBookId && savedBookInfo && (
@@ -506,11 +531,14 @@ function NullPage() {
         <SectionTitle><InfoIcon /> 幫助指南</SectionTitle>
         <HelpGrid>
           <HelpCard>
-            <h3>找到書籍</h3>
-            <p>造訪 <span>番茄小說網</span> (fanqienovel.com) 找到您想閱讀的小說。</p>
+            <h3>1. 找到書籍</h3>
+            <p>造訪 <span>番茄小說網</span> 找到您想閱讀的小說。</p>
+            <a href="https://fanqienovel.com" target="_blank" rel="noopener noreferrer" className="link-button">
+              前往番茄小說網
+            </a>
           </HelpCard>
           <HelpCard>
-            <h3>獲取 bookId</h3>
+            <h3>2. 獲取 bookId</h3>
             <p>在小說詳情頁的 URL 中找到那一串數字：</p>
             <div className="code-box">
               .../page/<span>123456789</span>?...

@@ -1,6 +1,7 @@
 import { useSearchParams, Navigate } from 'react-router-dom';
 import MyHead from '../components/MyHead';
 import NullPage from '../components/NullPage';
+import Footer from '../components/Footer';
 import { getLastReadChapter } from '../utils/storage';
 
 function Home() {
@@ -19,6 +20,7 @@ function Home() {
     <>
       <MyHead />
       <NullPage />
+      <Footer />
     </>
   );
 }
