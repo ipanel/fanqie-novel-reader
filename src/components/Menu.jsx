@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { maybeConvert } from '../utils/zh-convert';
+import { useConvertedText } from '../hooks/useConvertedText';
 
 const MenuList = styled.ul`
   list-style-type: none;
@@ -92,11 +92,18 @@ function Menu({ itemDataList, sortOrder, bookId, useTraditionalChinese = false }
     <MenuList>
       {items.map((item) => (
         <MenuItem key={item.item_id}>
-          <Link to={`/chapter?itemId=${item.item_id}${bookId ? `&bookId=${bookId}` : ''}`}>{maybeConvert(item.title, useTraditionalChinese)}</Link>
+          <MenuItemLink item={item} bookId={bookId} useTraditionalChinese={useTraditionalChinese} />
           {item.chapter_word_number != null && <span>共計{item.chapter_word_number}字</span>}
         </MenuItem>
       ))}
     </MenuList>
+  );
+}
+
+function MenuItemLink({ item, bookId, useTraditionalChinese }) {
+  const convertedTitle = useConvertedText(item.title ?? '', useTraditionalChinese);
+  return (
+    <Link to={`/chapter?itemId=${item.item_id}${bookId ? `&bookId=${bookId}` : ''}`}>{convertedTitle}</Link>
   );
 }
 

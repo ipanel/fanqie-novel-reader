@@ -3,7 +3,7 @@ import { List, Minus, Plus, Sun, Moon, RefreshCw, Languages, SlidersHorizontal, 
 import HomeButton from './HomeButton';
 import { IconButton, IconLink } from './IconButton';
 import styled from 'styled-components';
-import { maybeConvert } from '../utils/zh-convert';
+import { useConvertedText } from '../hooks/useConvertedText';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { FONT_SIZE_MIN, FONT_SIZE_MAX, TEXT_BRIGHTNESS_MIN, TEXT_BRIGHTNESS_MAX } from '../utils/constants';
 
@@ -215,6 +215,8 @@ const ProgressText = styled.div`
 function TopBar({ chapterData, bookInfo, fontSize, onFontSizeChange, textBrightness, onTextBrightnessChange, useTraditionalChinese = false, onTraditionalChineseToggle, onRefresh }) {
   const [toolsExpanded, setToolsExpanded] = useState(false);
   const isMobile = useMediaQuery('(max-width: 480px)');
+  const convertedTitle = useConvertedText(chapterData?.novel_data?.title ?? '', useTraditionalChinese);
+  const convertedBookName = useConvertedText(bookInfo?.book_info?.book_name ?? '', useTraditionalChinese);
 
   if (!chapterData || !chapterData.novel_data) return null;
 
@@ -291,8 +293,8 @@ function TopBar({ chapterData, bookInfo, fontSize, onFontSizeChange, textBrightn
     <TopBarWrapper>
       <InfoRow>
         <TitleBlock>
-          <h1>{maybeConvert(chapterData.novel_data.title, useTraditionalChinese)}</h1>
-          {bookInfo && <h3>{maybeConvert(bookInfo.book_info?.book_name, useTraditionalChinese)}</h3>}
+          <h1>{convertedTitle}</h1>
+          {bookInfo && <h3>{convertedBookName}</h3>}
         </TitleBlock>
         <RightActions>
           {isMobile ? (

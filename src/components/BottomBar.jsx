@@ -58,7 +58,7 @@ function BottomBar({ chapterData, bookId }) {
   const query = (id) => (bookId ? `itemId=${id}&bookId=${bookId}` : `itemId=${id}`);
 
   return (
-    <BottomBarWrapper aria-hidden="true">
+    <BottomBarWrapper>
       {pre_item_id ? (
         <Link to={`/chapter?${query(pre_item_id)}`} title="上一章">
           <IconWrapper>

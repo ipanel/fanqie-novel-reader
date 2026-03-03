@@ -7,6 +7,7 @@ import { safeGetItem, safeSetItem, safeGetJSON, getLastReadChapter, deleteBookDa
 import AbstractModal from './AbstractModal';
 import { cleanAbstract, truncateText, MAX_ABSTRACT_LENGTH } from '../utils/text';
 import { maybeConvert } from '../utils/zh-convert';
+import { useConvertedText } from '../hooks/useConvertedText';
 
 import { BookOpen, Search, Info as InfoIcon, Globe, Trash2, List } from 'lucide-react';
 
@@ -394,6 +395,19 @@ const HelpCard = styled.div`
   }
 `;
 
+function SavedBookContent({ savedBookInfo }) {
+  const bookName = useConvertedText(savedBookInfo.book_name, undefined);
+  const author = useConvertedText(savedBookInfo.author, undefined);
+  const abstract = useConvertedText(savedBookInfo.abstract ?? '', undefined);
+  return (
+    <>
+      <h3 className="title">{bookName}</h3>
+      <div className="author">{author}</div>
+      {savedBookInfo.abstract && <div className="abstract">{abstract}</div>}
+    </>
+  );
+}
+
 function NullPage() {
   const navigate = useNavigate();
   const [apiBase, setApiBaseState] = useState(() => getApiBase());
@@ -442,9 +456,10 @@ function NullPage() {
     navigate(`/catalog?bookId=${savedBookId}`);
   };
 
-  const handleDeleteBook = (e) => {
+  const handleDeleteBook = async (e) => {
     e.stopPropagation();
-    if (window.confirm(`確定要刪除「${maybeConvert(savedBookInfo?.book_name) || savedBookId}」的所有本地資料嗎？`)) {
+    const convertedName = (await maybeConvert(savedBookInfo?.book_name)) || savedBookId;
+    if (window.confirm(`確定要刪除「${convertedName}」的所有本地資料嗎？`)) {
       deleteBookData(savedBookId);
       setRefreshKey((k) => k + 1);
     }
@@ -486,11 +501,7 @@ function NullPage() {
               <img src={savedBookInfo.audio_thumb_uri} alt="封面" />
             )}
             <div className="content">
-              <h3 className="title">{maybeConvert(savedBookInfo.book_name)}</h3>
-              <div className="author">{maybeConvert(savedBookInfo.author)}</div>
-              {savedBookInfo.abstract && (
-                <div className="abstract">{maybeConvert(savedBookInfo.abstract)}</div>
-              )}
+              <SavedBookContent savedBookInfo={savedBookInfo} />
               <div className="meta">
                 {savedBookInfo.chapterCount > 0 ? `共 ${savedBookInfo.chapterCount} 章節` : '暫無章節資訊'}
               </div>

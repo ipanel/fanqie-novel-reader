@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import AbstractModal from './AbstractModal';
 import { cleanAbstract, truncateText, MAX_ABSTRACT_LENGTH, MOBILE_ABSTRACT_LENGTH } from '../utils/text';
-import { maybeConvert } from '../utils/zh-convert';
+import { useConvertedText } from '../hooks/useConvertedText';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 
 const InfoWrapper = styled.div`
@@ -127,7 +127,10 @@ function Info({ bookInfo, useTraditionalChinese = false }) {
   const isMobile = useMediaQuery('(max-width: 480px)');
   const bookData = bookInfo ? bookInfo : { book_info: {} };
   const bookInfoData = bookData.book_info || {};
-  const fullAbstract = cleanAbstract(maybeConvert(bookInfoData.abstract, useTraditionalChinese));
+  const convertedAbstract = useConvertedText(bookInfoData.abstract ?? '', useTraditionalChinese);
+  const convertedBookName = useConvertedText(bookInfoData.book_name ?? '', useTraditionalChinese);
+  const convertedAuthor = useConvertedText(bookInfoData.author ?? '', useTraditionalChinese);
+  const fullAbstract = cleanAbstract(convertedAbstract);
   const maxLen = isMobile ? MOBILE_ABSTRACT_LENGTH : MAX_ABSTRACT_LENGTH;
   const truncated = truncateText(fullAbstract, maxLen);
   const isLong = fullAbstract.length > maxLen;
@@ -144,8 +147,8 @@ function Info({ bookInfo, useTraditionalChinese = false }) {
       />
       <TextBlock>
         <TitleBlock>
-          <h1>{maybeConvert(bookInfoData.book_name, useTraditionalChinese)}</h1>
-          <h3>作者: {maybeConvert(bookInfoData.author, useTraditionalChinese)}</h3>
+          <h1>{convertedBookName}</h1>
+          <h3>作者: {convertedAuthor}</h3>
         </TitleBlock>
         <Abstract>{truncated}</Abstract>
         {isLong && (

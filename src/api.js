@@ -110,15 +110,16 @@ export async function fetchBook(bookId, { forceRefresh = false } = {}) {
   return result;
 }
 
-function applyChapterConversion(result) {
+async function applyChapterConversion(result) {
   const content = result?.data?.data?.content ?? '';
+  const converted = await maybeConvert(content);
   return {
     ...result,
     data: {
       ...result.data,
       data: {
         ...result.data?.data,
-        content: maybeConvert(content),
+        content: converted,
       },
     },
   };

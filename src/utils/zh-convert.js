@@ -1,22 +1,28 @@
-import { Converter } from 'opencc-js';
 import { getUseTraditionalChinese } from './storage';
 
 let converter = null;
+let converterPromise = null;
 
-function getConverter() {
-  if (!converter) {
-    converter = Converter({ from: 'cn', to: 'tw' });
+async function getConverter() {
+  if (converter) return converter;
+  if (!converterPromise) {
+    converterPromise = import('opencc-js/cn2t').then(({ Converter }) => {
+      converter = Converter({ from: 'cn', to: 'tw' });
+      return converter;
+    });
   }
-  return converter;
+  return converterPromise;
 }
 
-export function toTraditional(text) {
+export async function toTraditional(text) {
   if (!text || typeof text !== 'string') return text;
-  return getConverter()(text);
+  const conv = await getConverter();
+  return conv(text);
 }
 
-export function maybeConvert(text, useTraditional) {
+export async function maybeConvert(text, useTraditional) {
   const shouldConvert = useTraditional !== undefined ? useTraditional : getUseTraditionalChinese();
   if (!shouldConvert || !text || typeof text !== 'string') return text;
-  return getConverter()(text);
+  const conv = await getConverter();
+  return conv(text);
 }
