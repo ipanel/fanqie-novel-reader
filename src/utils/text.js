@@ -1,5 +1,6 @@
-export const MAX_ABSTRACT_LENGTH = 80;
-export const MOBILE_ABSTRACT_LENGTH = 45;
+import { MAX_ABSTRACT_LENGTH, MOBILE_ABSTRACT_LENGTH } from './constants';
+
+export { MAX_ABSTRACT_LENGTH, MOBILE_ABSTRACT_LENGTH };
 
 export function cleanAbstract(text) {
   if (!text) return '';

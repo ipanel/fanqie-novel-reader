@@ -129,6 +129,10 @@ function Chapter() {
     if (itemId) loadChapter(false);
   }, [itemId, loadChapter]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [itemId]);
+
   const handleRefresh = () => loadChapter(true);
 
   if (!itemId) {

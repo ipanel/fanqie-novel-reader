@@ -267,7 +267,8 @@ const Form = styled.form`
   }
 
   button {
-    padding: 14px 28px;
+    padding: 8px 28px;
+    margin: 1px 0;
     border-radius: 14px;
     background-color: var(--accent-color);
     color: #000;
@@ -544,7 +545,7 @@ function NullPage() {
                     {bookInfo.chapterCount > 0 ? `共 ${bookInfo.chapterCount} 章節` : '暫無章節資訊'}
                   </div>
                 </div>
-                <div className="action-hint">繼續閱讀 →</div>
+                <div className="action-hint">{getLastReadChapter(bookId) ? '繼續閱讀 →' : '前往目錄 →'}</div>
               </SavedBookCard>
             );
           })}

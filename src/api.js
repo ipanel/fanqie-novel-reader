@@ -1,5 +1,5 @@
-import { API_BASE_KEY, DIRECTORY_CACHE_KEY, CHAPTER_CACHE_KEY, DETAIL_CACHE_KEY } from './utils/constants';
-import { safeGetItem, safeSetItem } from './utils/storage';
+import { API_BASE_KEY, DIRECTORY_CACHE_KEY, CHAPTER_CACHE_KEY, DETAIL_CACHE_KEY, REQUEST_TIMEOUT_MS } from './utils/constants';
+import { safeGetItem, safeSetItem, setLastReadChapter } from './utils/storage';
 import { createCacheHelpers } from './utils/cache';
 import { maybeConvert } from './utils/zh-convert';
 
@@ -17,8 +17,6 @@ export function getApiBase() {
 export function setApiBase(url) {
   safeSetItem(API_BASE_KEY, url);
 }
-
-const REQUEST_TIMEOUT_MS = 45000; // 45 seconds
 
 async function fetchWithTimeout(url, options = {}, timeoutMs = REQUEST_TIMEOUT_MS) {
   const controller = new AbortController();
@@ -80,6 +78,7 @@ export async function fetchBook(bookId, { forceRefresh = false } = {}) {
   if (!forceRefresh) {
     const cached = directoryCache.get(bookId);
     if (cached) {
+      setLastReadChapter(bookId, null);
       return { data: { data: { data: cached } } };
     }
   }
@@ -98,6 +97,7 @@ export async function fetchBook(bookId, { forceRefresh = false } = {}) {
   }));
   const inner = { book_info: {}, item_data_list: itemDataList };
   directoryCache.set(bookId, inner);
+  setLastReadChapter(bookId, null);
   return { data: { data: { data: inner } } };
 }
 

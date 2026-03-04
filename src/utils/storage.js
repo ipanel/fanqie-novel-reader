@@ -84,10 +84,20 @@ export function getLastReadChapter(bookId) {
 }
 
 export function setLastReadChapter(bookId, itemId) {
-  if (!bookId || !itemId) return false;
+  if (!bookId) return false;
   const now = Date.now();
+  const existing = getReadingHistory().find((e) => e.bookId === bookId);
+
+  if (itemId != null && itemId !== '') {
+    let history = getReadingHistory().filter((e) => e.bookId !== bookId);
+    history.unshift({ bookId: String(bookId), itemId: String(itemId), lastReadAt: now });
+    history = history.slice(0, READING_HISTORY_MAX);
+    return safeSetJSON(READING_HISTORY_KEY, history);
+  }
+  // catalog-only: add to history only if not already present (don't overwrite chapter)
+  if (existing) return true;
   let history = getReadingHistory().filter((e) => e.bookId !== bookId);
-  history.unshift({ bookId: String(bookId), itemId: String(itemId), lastReadAt: now });
+  history.unshift({ bookId: String(bookId), itemId: null, lastReadAt: now });
   history = history.slice(0, READING_HISTORY_MAX);
   return safeSetJSON(READING_HISTORY_KEY, history);
 }
@@ -124,4 +134,10 @@ export function getUseTraditionalChinese() {
 
 export function setUseTraditionalChinese(enabled) {
   return safeSetItem(TRADITIONAL_CHINESE_KEY, enabled ? '1' : '0');
+}
+
+export function isChapterCached(itemId) {
+  if (!itemId) return false;
+  const raw = safeGetJSON(`${CHAPTER_CACHE_KEY}-${itemId}`);
+  return raw != null;
 }
