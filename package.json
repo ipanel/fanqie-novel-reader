@@ -13,7 +13,6 @@
     "lint": "eslint src --ext js,jsx"
   },
   "dependencies": {
-    "@vercel/analytics": "^1.0.2",
     "lucide-react": "^0.576.0",
     "opencc-js": "^1.0.5",
     "react": "18.2.0",
