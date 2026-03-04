@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import styled from 'styled-components';
+import { buildChapterUrl } from '../utils/navigation';
 
 const BottomBarWrapper = styled.div`
   position: fixed;
@@ -55,12 +56,11 @@ function BottomBar({ chapterData, bookId }) {
   if (!chapterData || !chapterData.novel_data) return null;
 
   const { pre_item_id, next_item_id } = chapterData.novel_data;
-  const query = (id) => (bookId ? `itemId=${id}&bookId=${bookId}` : `itemId=${id}`);
 
   return (
     <BottomBarWrapper>
       {pre_item_id ? (
-        <Link to={`/chapter?${query(pre_item_id)}`} title="上一章">
+        <Link to={buildChapterUrl(pre_item_id, bookId)} title="上一章">
           <IconWrapper>
             <ChevronLeft size={28} strokeWidth={2} />
           </IconWrapper>
@@ -73,7 +73,7 @@ function BottomBar({ chapterData, bookId }) {
         </span>
       )}
       {next_item_id ? (
-        <Link to={`/chapter?${query(next_item_id)}`} title="下一章">
+        <Link to={buildChapterUrl(next_item_id, bookId)} title="下一章">
           <IconWrapper>
             <ChevronRight size={28} strokeWidth={2} />
           </IconWrapper>

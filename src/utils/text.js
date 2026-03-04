@@ -4,7 +4,7 @@ export { MAX_ABSTRACT_LENGTH, MOBILE_ABSTRACT_LENGTH };
 
 export function cleanAbstract(text) {
   if (!text) return '';
-  return text.replace(/\n　　/g, '\n').trim();
+  return text.replace(/\n[\u3000]+/g, '\n').trim();
 }
 
 export function truncateText(text, maxLength = MAX_ABSTRACT_LENGTH) {

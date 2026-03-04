@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useState } from 'react';
 import { useSearchParams, Navigate, useNavigate, Link } from 'react-router-dom';
 import { Bookmark, Languages, RefreshCw } from 'lucide-react';
 import Menu from '../components/Menu';
@@ -10,6 +10,8 @@ import LoadingPage from '../components/LoadingPage';
 import HomeButton from '../components/HomeButton';
 import { IconButton } from '../components/IconButton';
 import styled from 'styled-components';
+import { RightActions } from '../components/common/ActionBar';
+import { buildChapterUrl } from '../utils/navigation';
 
 const CatalogWrapper = styled.div`
   min-height: 100dvh;
@@ -19,9 +21,9 @@ const CatalogWrapper = styled.div`
   background-color: var(--background-color);
   padding-bottom: env(safe-area-inset-bottom);
 `;
-import { getLastReadChapter, getUseTraditionalChinese, setUseTraditionalChinese } from '../utils/storage';
-import { formatErrorMessage } from '../utils/errors';
-import { fetchBookWithDetail } from '../utils/api-helpers';
+import { getLastReadChapter } from '../utils/storage';
+import { useTraditionalChineseToggle } from '../hooks/useTraditionalChineseToggle';
+import { useBookLoader } from '../hooks/useBookLoader';
 
 const BackBar = styled.div`
   display: flex;
@@ -67,60 +69,18 @@ const SiteTitle = styled(Link)`
   }
 `;
 
-const RightActions = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-left: auto;
-
-  @media (max-width: 480px) {
-    gap: 2px;
-  }
-`;
-
 function Catalog() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const bookId = searchParams.get('bookId');
   const lastReadItemId = bookId ? getLastReadChapter(bookId) : null;
-  const [error, setError] = useState(null);
-  const [bookInfo, setBookInfo] = useState(null);
+  
+  const { error, bookInfo, loadBook } = useBookLoader(bookId);
   const [sortOrder, setSortOrder] = useState('ascending');
-  const [useTraditionalChinese, setUseTraditionalChineseState] = useState(getUseTraditionalChinese);
-
-  const loadBook = useCallback((forceRefresh = false) => {
-    if (!bookId) return;
-    if (forceRefresh) {
-      setError(null);
-      setBookInfo(null);
-    }
-    fetchBookWithDetail(bookId, { forceRefresh, catalogOnly: forceRefresh })
-      .then((merged) => {
-        setBookInfo(merged);
-      })
-      .catch((err) => {
-        console.error('獲取圖書資訊失敗：', err);
-        const msg = formatErrorMessage(
-          err,
-          '獲取圖書資訊失敗，請檢查<span>bookId</span>是否正確，或者稍後再試。'
-        );
-        setError(msg);
-      });
-  }, [bookId]);
-
-  useEffect(() => {
-    if (bookId) loadBook(false);
-  }, [bookId, loadBook]);
-
-  const handleTraditionalChineseToggle = useCallback(() => {
-    const next = !useTraditionalChinese;
-    setUseTraditionalChinese(next);
-    setUseTraditionalChineseState(next);
-  }, [useTraditionalChinese]);
+  const [useTraditionalChinese, toggleTraditionalChinese] = useTraditionalChineseToggle();
 
   const handleSortChange = () => {
-    const newSortOrder = sortOrder === 'ascending' ? 'descending' : 'ascending';
-    setSortOrder(newSortOrder);
+    setSortOrder(sortOrder === 'ascending' ? 'descending' : 'ascending');
   };
 
   if (!bookId) {
@@ -142,7 +102,7 @@ function Catalog() {
           <IconButton
             type="button"
             title={useTraditionalChinese ? '切換為簡體中文' : '切換為繁體中文'}
-            onClick={handleTraditionalChineseToggle}
+            onClick={toggleTraditionalChinese}
             style={useTraditionalChinese ? { color: 'var(--accent-color)' } : undefined}
           >
             <Languages size={20} strokeWidth={2.5} />
@@ -157,7 +117,7 @@ function Catalog() {
           {lastReadItemId && (
             <IconButton
               type="button"
-              onClick={() => navigate(`/chapter?bookId=${bookId}&itemId=${lastReadItemId}`)}
+              onClick={() => navigate(buildChapterUrl(lastReadItemId, bookId))}
               title="返回章節"
             >
               <Bookmark size={20} strokeWidth={2} />

@@ -3,6 +3,7 @@ import MyHead from '../components/MyHead';
 import NullPage from '../components/NullPage';
 import Footer from '../components/Footer';
 import { getLastReadChapter } from '../utils/storage';
+import { buildChapterOrCatalogUrl } from '../utils/navigation';
 
 function Home() {
   const [searchParams] = useSearchParams();
@@ -10,9 +11,7 @@ function Home() {
 
   if (bookId) {
     const lastReadItemId = getLastReadChapter(bookId);
-    const target = lastReadItemId
-      ? `/chapter?bookId=${bookId}&itemId=${lastReadItemId}`
-      : `/catalog?bookId=${bookId}`;
+    const target = buildChapterOrCatalogUrl(bookId, lastReadItemId);
     return <Navigate to={target} replace />;
   }
 

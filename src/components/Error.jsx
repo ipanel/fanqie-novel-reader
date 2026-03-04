@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { SecondaryButton } from './common/Button';
 
 const ErrorWrapper = styled.div`
   display: flex;
@@ -21,21 +22,8 @@ const ErrorText = styled.p`
   word-break: break-word;
 `;
 
-const HomeButton = styled.button`
+const StyledHomeButton = styled(SecondaryButton)`
   margin-top: 8px;
-  padding: 10px 20px;
-  font-size: 0.9rem;
-  color: var(--text-color-secondary);
-  background: var(--background-color2);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    color: var(--accent-color);
-    border-color: var(--accent-color);
-  }
 `;
 
 function Error({ message, href = '/' }) {
@@ -43,9 +31,9 @@ function Error({ message, href = '/' }) {
   return (
     <ErrorWrapper role="alert">
       <ErrorText dangerouslySetInnerHTML={{ __html: message }} />
-      <HomeButton type="button" onClick={() => navigate(href)}>
+      <StyledHomeButton type="button" onClick={() => navigate(href)}>
         返回首頁
-      </HomeButton>
+      </StyledHomeButton>
     </ErrorWrapper>
   );
 }

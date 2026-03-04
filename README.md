@@ -1,72 +1,76 @@
 # 番茄小說閱讀器
 
-Tomato Reader - 一個簡潔、無廣告的番茄小說閱讀器，適用於 Web 和行動裝置。
+一個簡潔、無廣告的番茄小說閱讀器，適用於 Web 和行動裝置。本地儲存、免註冊、免登入，無需中國大陸手機號即可閱讀。
 
-Tomato Reader is a clean and ad-free novel reader for both web and mobile.
+## 專案簡介
 
-## 專案簡介 (Introduction)
+**番茄小說閱讀器** 是一個用於線上閱讀番茄小說的 Web 應用，提供簡單、無干擾的閱讀體驗。只需輸入書籍 ID，即可開始暢享你喜歡的小說。
 
-**番茄小說閱讀器** 是一個用於線上閱讀小說的平台，它旨在提供一個簡單、無干擾的閱讀體驗。無需繁瑣的註冊，只需輸入書籍ID，即可開始暢享你喜歡的小說。
+## 功能特點
 
-**Tomato Reader** is a platform for reading novels online. It aims to provide a simple and distraction-free reading experience. No need for complicated registration, just enter the book ID, and you can start enjoying your favorite novels.
+- **無廣告**：閱讀過程中不會顯示任何廣告
+- **免註冊**：無需註冊或登入，無需中國大陸手機號
+- **跨平台**：支援電腦、平板、手機，響應式設計
+- **簡潔介面**：清晰的介面設計，減少干擾，專注於閱讀
+- **本地儲存**：閱讀歷史與進度儲存於瀏覽器本地
+- **繁簡轉換**：可切換簡體中文與繁體中文
+- **閱讀設定**：可調整字體大小與文字亮度
+- **章節排序**：目錄支援正序／倒序排列
+- **下載管理**：目錄可管理章節下載，支援多章節同時預載，流暢切換章節
 
-## 開發 (Development)
+## 快速開始
+
+### 開發
 
 ```bash
 npm install
 npm run dev
 ```
 
-在瀏覽器中開啟 http://localhost:5173 即可。應用直接呼叫番茄小說 API，無需後端服務。
+在瀏覽器中開啟 http://localhost:5173。應用直接呼叫番茄小說 API，無需後端服務。
 
-Open http://localhost:5173 in your browser. The app calls the novel API directly—no backend required.
+### 預覽建構結果
 
-## 建構與部署 (Build & Deploy)
+```bash
+npm run build
+npm run preview
+```
+
+### 建構與部署
 
 ```bash
 npm run build
 ```
 
-建構後的靜態檔案將輸出到 `dist/` 目錄，可部署到任意靜態託管服務（如 Vercel、Netlify、GitHub Pages）。
+建構後的靜態檔案輸出至 `dist/` 目錄，可部署至任意靜態託管服務（如 Vercel、Netlify、GitHub Pages、Cloudflare Pages）。
 
-The built static files will be output to `dist/` and can be deployed to any static host (e.g. Vercel, Netlify, GitHub Pages).
+## 使用方法
 
-## 使用方法 (Getting Started)
+1. **取得書籍 ID**：前往 [番茄小說網](https://fanqienovel.com) 找到想閱讀的小說，在詳情頁 URL 中取得數字 ID，例如：
+   ```
+   https://fanqienovel.com/page/123456789?...
+   ```
+   其中 `123456789` 即為書籍 ID。
 
-要開始使用番茄小說閱讀器，只需按照以下步驟操作：
+2. **開始閱讀**：在首頁輸入框中輸入書籍 ID，點擊「開始閱讀」。
 
-To get started with Tomato Reader, simply follow these steps:
+3. **繼續閱讀**：閱讀歷史會顯示在首頁，點擊即可從上次進度繼續閱讀。
 
-1. 在輸入框中輸入書籍ID，然後點擊「開始閱讀」。
+## 專案結構
 
-   Enter the book ID in the input field, then click "Start Reading."
+```
+src/
+├── api.js              # API 請求
+├── components/         # 共用元件
+├── hooks/              # 自訂 Hooks
+├── pages/              # 頁面元件
+└── utils/              # 工具函式
+```
 
-2. 開始閱讀你喜歡的小說！
+## 注意事項
 
-   Start reading your favorite novel!
-
-## 特點 (Features)
-
-- **簡潔介面**：清晰的介面設計，減少干擾，讓你專注於閱讀。
-
-  **Clean Interface**: Clear interface design that reduces distractions and allows you to focus on reading.
-
-- **無廣告**：我們保證在閱讀過程中不會顯示任何廣告。
-
-  **Ad-Free**: We guarantee that no ads will be displayed while you are reading.
-
-- **跨平台**：無論你使用的是電腦、平板還是手機，都可以使用番茄小說閱讀器。
-
-  **Cross-Platform**: Tomato Reader is accessible on your computer, tablet, or smartphone.
-
-## 注意 (Warning)
-
-本專案僅作為學習交流，請不要將該專案應用於商業用途，否則一切風險需要自行承擔。
-
-This project is for educational and learning purposes only. Please do not use this project for commercial purposes, as all risks associated with such usage are your responsibility.
+本專案僅供學習交流使用，請勿將該專案應用於商業用途，否則一切風險需自行承擔。
 
 ---
 
-感謝您使用番茄小說閱讀器！希望你享受愉快的閱讀時光。
-
-Thank you for using Tomato Reader! We hope you enjoy your reading experience.
+感謝使用番茄小說閱讀器，祝你閱讀愉快。

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { SecondaryButton } from './common/Button';
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -50,21 +51,8 @@ const Spinner = styled.div`
   margin: 0 auto;
 `;
 
-const AbortButton = styled.button`
+const AbortButton = styled(SecondaryButton)`
   margin-top: 16px;
-  padding: 10px 20px;
-  font-size: 0.9rem;
-  color: var(--text-color-secondary);
-  background: var(--background-color2);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    color: var(--accent-color);
-    border-color: var(--accent-color);
-  }
 `;
 
 function LoadingPage({ onAbort }) {

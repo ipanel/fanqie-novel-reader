@@ -7,7 +7,7 @@ function MyHead({ bookInfo, chapterData }) {
   const author = bookInfo && bookInfo.book_info && bookInfo.book_info.author;
   const icon = bookInfo && bookInfo.book_info && bookInfo.book_info.audio_thumb_uri;
   const currentURL = typeof window !== 'undefined' ? window.location.href : '';
-  const rawDesc = bookInfo?.book_info?.abstract?.replace(/\n　　/g, ' ') ?? '';
+  const rawDesc = bookInfo?.book_info?.abstract?.replace(/\n[\u3000]+/g, ' ') ?? '';
   const description = rawDesc
     ? (rawDesc.length > 160 ? rawDesc.slice(0, 160) + '…' : rawDesc)
     : '番茄小說第三方閱讀器，輸入bookId即可閱讀。';

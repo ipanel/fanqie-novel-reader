@@ -125,22 +125,25 @@ const ShowMore = styled.button`
 function Info({ bookInfo, useTraditionalChinese = false }) {
   const [showFullAbstract, setShowFullAbstract] = useState(false);
   const isMobile = useMediaQuery('(max-width: 480px)');
-  const bookData = bookInfo ? bookInfo : { book_info: {} };
-  const bookInfoData = bookData.book_info || {};
-  const convertedAbstract = useConvertedText(bookInfoData.abstract ?? '', useTraditionalChinese);
-  const convertedBookName = useConvertedText(bookInfoData.book_name ?? '', useTraditionalChinese);
-  const convertedAuthor = useConvertedText(bookInfoData.author ?? '', useTraditionalChinese);
+  
+  const bookInfoData = bookInfo?.book_info || {};
+  const { book_name, author, audio_thumb_uri, abstract } = bookInfoData;
+
+  const convertedAbstract = useConvertedText(abstract ?? '', useTraditionalChinese);
+  const convertedBookName = useConvertedText(book_name ?? '', useTraditionalChinese);
+  const convertedAuthor = useConvertedText(author ?? '', useTraditionalChinese);
+  
   const fullAbstract = cleanAbstract(convertedAbstract);
   const maxLen = isMobile ? MOBILE_ABSTRACT_LENGTH : MAX_ABSTRACT_LENGTH;
   const truncated = truncateText(fullAbstract, maxLen);
   const isLong = fullAbstract.length > maxLen;
 
-  if (!bookInfoData.book_name && !bookInfoData.author) return null;
+  if (!book_name && !author) return null;
 
   return (
     <InfoWrapper>
       <img
-        src={bookInfoData.audio_thumb_uri}
+        src={audio_thumb_uri}
         alt="書籍封面"
         width="128"
         height="128"

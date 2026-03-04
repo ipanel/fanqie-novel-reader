@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { List, Minus, Plus, Sun, Moon, RefreshCw, Languages, SlidersHorizontal, X } from 'lucide-react';
-import HomeButton from './HomeButton';
-import { IconButton, IconLink } from './IconButton';
+import { SlidersHorizontal, X } from 'lucide-react';
+import { IconButton } from './IconButton';
 import styled from 'styled-components';
 import { useConvertedText } from '../hooks/useConvertedText';
 import { useMediaQuery } from '../hooks/useMediaQuery';
-import { FONT_SIZE_MIN, FONT_SIZE_MAX, TEXT_BRIGHTNESS_MIN, TEXT_BRIGHTNESS_MAX } from '../utils/constants';
+import { RightActions } from './common/ActionBar';
+import TopBarTools from './TopBarTools';
 
 const TopBarWrapper = styled.div`
   display: flex;
@@ -35,13 +35,6 @@ const InfoRow = styled.div`
   align-items: center;
   gap: 16px;
   align-self: stretch;
-`;
-
-const RightActions = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
 `;
 
 const ToolsToggle = styled.button`
@@ -223,71 +216,16 @@ function TopBar({ chapterData, bookInfo, fontSize, onFontSizeChange, textBrightn
   const { order, serial_count } = chapterData.novel_data;
   const progress = ((parseInt(order) / parseInt(serial_count)) * 100).toFixed(1);
 
-  const renderTools = () => (
-    <>
-      <HomeButton />
-      {onFontSizeChange && (
-        <>
-          <IconButton
-            type="button"
-            title="減小字號"
-            disabled={fontSize <= FONT_SIZE_MIN}
-            onClick={() => onFontSizeChange(-1)}
-          >
-            <Minus size={20} strokeWidth={2.5} />
-          </IconButton>
-          <IconButton
-            type="button"
-            title="增大字號"
-            disabled={fontSize >= FONT_SIZE_MAX}
-            onClick={() => onFontSizeChange(1)}
-          >
-            <Plus size={20} strokeWidth={2.5} />
-          </IconButton>
-        </>
-      )}
-      {onTraditionalChineseToggle && (
-        <IconButton
-          type="button"
-          title={useTraditionalChinese ? '切換為簡體中文' : '切換為繁體中文'}
-          onClick={onTraditionalChineseToggle}
-          style={useTraditionalChinese ? { color: 'var(--accent-color)' } : undefined}
-        >
-          <Languages size={20} strokeWidth={2.5} />
-        </IconButton>
-      )}
-      {onTextBrightnessChange && (
-        <>
-          <IconButton
-            type="button"
-            title="變暗"
-            disabled={textBrightness <= TEXT_BRIGHTNESS_MIN}
-            onClick={() => onTextBrightnessChange(-1)}
-          >
-            <Moon size={20} strokeWidth={2.5} />
-          </IconButton>
-          <IconButton
-            type="button"
-            title="變亮"
-            disabled={textBrightness >= TEXT_BRIGHTNESS_MAX}
-            onClick={() => onTextBrightnessChange(1)}
-          >
-            <Sun size={20} strokeWidth={2.5} />
-          </IconButton>
-        </>
-      )}
-      {onRefresh && (
-        <IconButton type="button" title="重新載入章節" onClick={onRefresh}>
-          <RefreshCw size={20} strokeWidth={2.5} />
-        </IconButton>
-      )}
-      {chapterData.novel_data.book_id && (
-        <IconLink to={`/catalog?bookId=${chapterData.novel_data.book_id}`} title="目錄">
-          <List size={20} strokeWidth={2.5} />
-        </IconLink>
-      )}
-    </>
-  );
+  const toolsProps = {
+    chapterData,
+    fontSize,
+    onFontSizeChange,
+    textBrightness,
+    onTextBrightnessChange,
+    useTraditionalChinese,
+    onTraditionalChineseToggle,
+    onRefresh,
+  };
 
   return (
     <TopBarWrapper>
@@ -302,7 +240,7 @@ function TopBar({ chapterData, bookInfo, fontSize, onFontSizeChange, textBrightn
               <SlidersHorizontal size={20} strokeWidth={2.5} />
             </ToolsToggle>
           ) : (
-            renderTools()
+            <TopBarTools {...toolsProps} />
           )}
         </RightActions>
       </InfoRow>
@@ -316,7 +254,9 @@ function TopBar({ chapterData, bookInfo, fontSize, onFontSizeChange, textBrightn
                 <X size={20} strokeWidth={2.5} />
               </IconButton>
             </ToolsPanelHeader>
-            <ToolsPanelContent>{renderTools()}</ToolsPanelContent>
+            <ToolsPanelContent>
+              <TopBarTools {...toolsProps} />
+            </ToolsPanelContent>
           </ToolsPanel>
         </>
       )}

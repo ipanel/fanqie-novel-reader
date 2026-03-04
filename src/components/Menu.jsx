@@ -1,21 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import styled, { keyframes } from 'styled-components';
-import { Check, X, Loader2, Download, RefreshCw, Minus } from 'lucide-react';
+import styled from 'styled-components';
+import { Download, RefreshCw, Minus } from 'lucide-react';
 import { useConvertedText } from '../hooks/useConvertedText';
 import { useDownloadManager } from '../contexts/DownloadManager';
 import { isChapterCached } from '../utils/storage';
 import { IconButton } from './IconButton';
-
-const spin = keyframes`
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-`;
-
-const SpinningIcon = styled.span`
-  display: flex;
-  animation: ${spin} 1s linear infinite;
-`;
+import { buildChapterUrl } from '../utils/navigation';
+import ChapterStatusIcon from './ChapterStatusIcon';
+import { sortChaptersByNumber } from '../utils/sorting';
 
 const DisabledLinkSpan = styled.span`
   display: block;
@@ -118,24 +111,11 @@ const MenuItem = styled.li`
 
 function Menu({ itemDataList, sortOrder, bookId, useTraditionalChinese = false }) {
   const { isDownloading } = useDownloadManager();
-  const items = [...(itemDataList || [])];
-
-  const compareChapters = (a, b) => {
-    const regex = /第(\d+)章/;
-    const aMatch = a.title.match(regex);
-    const bMatch = b.title.match(regex);
-    if (!aMatch || !bMatch) return 0;
-    const aChapter = parseInt(aMatch[1]);
-    const bChapter = parseInt(bMatch[1]);
-    if (sortOrder === 'descending') return bChapter - aChapter;
-    return aChapter - bChapter;
-  };
-
-  items.sort(compareChapters);
+  const sortedItems = sortChaptersByNumber(itemDataList, sortOrder);
 
   return (
     <MenuList>
-      {items.map((item) => (
+      {sortedItems.map((item) => (
         <MenuItem key={item.item_id}>
           <MenuItemLink item={item} bookId={bookId} useTraditionalChinese={useTraditionalChinese} isDownloading={isDownloading(item.item_id)} />
           <ChapterActions item={item} />
@@ -148,7 +128,6 @@ function Menu({ itemDataList, sortOrder, bookId, useTraditionalChinese = false }
 
 function MenuItemLink({ item, bookId, useTraditionalChinese, isDownloading }) {
   const convertedTitle = useConvertedText(item.title ?? '', useTraditionalChinese);
-  const to = `/chapter?itemId=${item.item_id}${bookId ? `&bookId=${bookId}` : ''}`;
 
   if (isDownloading) {
     return (
@@ -158,7 +137,7 @@ function MenuItemLink({ item, bookId, useTraditionalChinese, isDownloading }) {
     );
   }
 
-  return <Link to={to}>{convertedTitle}</Link>;
+  return <Link to={buildChapterUrl(item.item_id, bookId)}>{convertedTitle}</Link>;
 }
 
 function ChapterActions({ item }) {
@@ -167,23 +146,23 @@ function ChapterActions({ item }) {
   const cached = isChapterCached(itemId);
   const downloading = isDownloading(itemId);
 
-  const statusIcon = downloading ? (
-    <SpinningIcon>
-      <Loader2 size={18} />
-    </SpinningIcon>
-  ) : cached ? (
-    <Check size={18} color="var(--accent-color)" />
-  ) : (
-    <X size={18} color="var(--text-color-secondary)" />
-  );
+  const getActionIcon = () => {
+    if (downloading) return <Minus size={18} style={{ opacity: 0.5 }} />;
+    if (cached) return <RefreshCw size={18} />;
+    return <Download size={18} />;
+  };
 
-  const actionIcon = downloading ? (
-    <Minus size={18} style={{ opacity: 0.5 }} />
-  ) : cached ? (
-    <RefreshCw size={18} />
-  ) : (
-    <Download size={18} />
-  );
+  const getActionTitle = () => {
+    if (downloading) return '下載中';
+    if (cached) return '重新整理';
+    return '下載';
+  };
+
+  const getStatusTitle = () => {
+    if (downloading) return '下載中';
+    if (cached) return '已下載';
+    return '未下載';
+  };
 
   const handleClick = () => {
     if (downloading) return;
@@ -192,16 +171,16 @@ function ChapterActions({ item }) {
 
   return (
     <div className="chapter-actions">
-      <span title={downloading ? '下載中' : cached ? '已下載' : '未下載'} style={{ display: 'flex', color: 'var(--text-color-secondary)' }}>
-        {statusIcon}
+      <span title={getStatusTitle()} style={{ display: 'flex', color: 'var(--text-color-secondary)' }}>
+        <ChapterStatusIcon isDownloading={downloading} isCached={cached} />
       </span>
       <IconButton
         type="button"
-        title={downloading ? '下載中' : cached ? '重新整理' : '下載'}
+        title={getActionTitle()}
         onClick={handleClick}
         disabled={downloading}
       >
-        {actionIcon}
+        {getActionIcon()}
       </IconButton>
     </div>
   );

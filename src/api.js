@@ -35,6 +35,14 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = REQUEST_TIMEOUT_M
   }
 }
 
+async function fetchAndValidate(url, options = {}) {
+  const res = await fetchWithTimeout(url, options);
+  if (!res.ok) throw new Error('Failed to fetch data');
+  const json = await res.json();
+  if (json.code !== 200) throw new Error('Failed to fetch data');
+  return json;
+}
+
 function stripHtmlTagsAndNewlines(html) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
@@ -53,16 +61,12 @@ const detailCache = createCacheHelpers(DETAIL_CACHE_KEY);
 export async function fetchBookDetail(bookId, { forceRefresh = false } = {}) {
   if (!forceRefresh) {
     const cached = detailCache.get(bookId);
-    if (cached) {
-      return cached;
-    }
+    if (cached) return cached;
   }
 
   const url = `${getApiBase()}/api/detail?book_id=${bookId}`;
-  const res = await fetchWithTimeout(url);
-  if (!res.ok) throw new Error('Failed to fetch book detail');
-  const json = await res.json();
-  if (json.code !== 200) throw new Error('Failed to fetch book detail');
+  const json = await fetchAndValidate(url);
+  
   const d = json.data?.data ?? {};
   const result = {
     abstract: d.abstract ?? '',
@@ -70,6 +74,7 @@ export async function fetchBookDetail(bookId, { forceRefresh = false } = {}) {
     audio_thumb_uri: d.audio_thumb_uri ?? '',
     book_name: d.book_name ?? '',
   };
+  
   detailCache.set(bookId, result);
   return result;
 }
@@ -84,20 +89,24 @@ export async function fetchBook(bookId, { forceRefresh = false } = {}) {
   }
 
   const url = `${getApiBase()}/api/directory?book_id=${bookId}`;
-  const res = await fetchWithTimeout(url, forceRefresh ? { cache: 'no-store' } : {});
-  if (!res.ok) throw new Error('Failed to fetch book data');
-  const json = await res.json();
-  if (json.code !== 200) throw new Error('Failed to fetch book data');
+  const options = forceRefresh ? { cache: 'no-store' } : {};
+  const json = await fetchAndValidate(url, options);
+  
   const { lists } = json.data || {};
+  if (!lists || lists.length === 0) {
+    throw new Error('Invalid book ID or book not found');
+  }
   const itemDataList = (lists || []).map((item) => ({
     item_id: item.item_id,
     title: item.title,
     version: item.version,
     chapter_word_number: item.chapter_word_number ?? null,
   }));
+  
   const inner = { book_info: {}, item_data_list: itemDataList };
   directoryCache.set(bookId, inner);
   setLastReadChapter(bookId, null);
+  
   return { data: { data: { data: inner } } };
 }
 
@@ -125,15 +134,13 @@ export async function fetchItem(itemId, { forceRefresh = false } = {}) {
     }
   }
 
-  // API 參數 tab 使用簡體「小说」，後端可能依此識別
   const url = `${getApiBase()}/api/content?tab=小说&item_id=${itemId}`;
-  const res = await fetchWithTimeout(url);
-  if (!res.ok) throw new Error('Failed to fetch chapter content');
-  const json = await res.json();
-  if (json.code !== 200) throw new Error('Failed to fetch chapter content');
+  const json = await fetchAndValidate(url);
+  
   const content = json.data?.content ?? '';
   const filteredContent = stripHtmlTagsAndNewlines(content);
   chapterCache.set(itemId, filteredContent);
+  
   const result = {
     data: {
       data: {
@@ -142,5 +149,6 @@ export async function fetchItem(itemId, { forceRefresh = false } = {}) {
       },
     },
   };
+  
   return applyChapterConversion(result);
 }
