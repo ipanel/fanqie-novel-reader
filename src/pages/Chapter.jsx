@@ -9,7 +9,6 @@ import Error from '../components/Error';
 import MyHead from '../components/MyHead';
 import LoadingPage from '../components/LoadingPage';
 import {
-  BOOK_ID_KEY,
   FONT_SIZE_MIN,
   FONT_SIZE_MAX,
   FONT_SIZE_STEP,
@@ -17,7 +16,7 @@ import {
   TEXT_BRIGHTNESS_MAX,
   TEXT_BRIGHTNESS_STEP,
 } from '../utils/constants';
-import { safeGetItem, setLastReadChapter, getFontSize, setFontSize, getTextBrightness, setTextBrightness, getUseTraditionalChinese, setUseTraditionalChinese } from '../utils/storage';
+import { setLastReadChapter, getFontSize, setFontSize, getTextBrightness, setTextBrightness, getUseTraditionalChinese, setUseTraditionalChinese } from '../utils/storage';
 import { formatErrorMessage } from '../utils/errors';
 import { fetchBookWithDetail } from '../utils/api-helpers';
 
@@ -52,7 +51,7 @@ function Chapter() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const itemId = searchParams.get('itemId');
-  const bookId = searchParams.get('bookId') || safeGetItem(BOOK_ID_KEY);
+  const bookId = searchParams.get('bookId');
   const [error, setError] = useState(null);
   const [chapterData, setChapterData] = useState(null);
   const [bookInfo, setBookInfo] = useState(null);

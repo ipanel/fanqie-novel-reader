@@ -80,7 +80,7 @@ export async function fetchBook(bookId, { forceRefresh = false } = {}) {
   if (!forceRefresh) {
     const cached = directoryCache.get(bookId);
     if (cached) {
-      return cached;
+      return { data: { data: { data: cached } } };
     }
   }
 
@@ -96,18 +96,9 @@ export async function fetchBook(bookId, { forceRefresh = false } = {}) {
     version: item.version,
     chapter_word_number: item.chapter_word_number ?? null,
   }));
-  const result = {
-    data: {
-      data: {
-        data: {
-          book_info: {},
-          item_data_list: itemDataList,
-        },
-      },
-    },
-  };
-  directoryCache.set(bookId, result);
-  return result;
+  const inner = { book_info: {}, item_data_list: itemDataList };
+  directoryCache.set(bookId, inner);
+  return { data: { data: { data: inner } } };
 }
 
 async function applyChapterConversion(result) {
@@ -128,8 +119,9 @@ async function applyChapterConversion(result) {
 export async function fetchItem(itemId, { forceRefresh = false } = {}) {
   if (!forceRefresh) {
     const cached = chapterCache.get(itemId);
-    if (cached) {
-      return applyChapterConversion(cached);
+    if (cached != null) {
+      const result = { data: { data: { content: cached, novel_data: null } } };
+      return applyChapterConversion(result);
     }
   }
 
@@ -141,6 +133,7 @@ export async function fetchItem(itemId, { forceRefresh = false } = {}) {
   if (json.code !== 200) throw new Error('Failed to fetch chapter content');
   const content = json.data?.content ?? '';
   const filteredContent = stripHtmlTagsAndNewlines(content);
+  chapterCache.set(itemId, filteredContent);
   const result = {
     data: {
       data: {
@@ -149,6 +142,5 @@ export async function fetchItem(itemId, { forceRefresh = false } = {}) {
       },
     },
   };
-  chapterCache.set(itemId, result);
   return applyChapterConversion(result);
 }

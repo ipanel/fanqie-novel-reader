@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { API_OPTIONS, getApiBase, setApiBase } from '../api';
-import { BOOK_ID_KEY, DIRECTORY_CACHE_KEY, DETAIL_CACHE_KEY } from '../utils/constants';
-import { safeGetItem, safeSetItem, safeGetJSON, getLastReadChapter, deleteBookData } from '../utils/storage';
+import { DIRECTORY_CACHE_KEY, DETAIL_CACHE_KEY } from '../utils/constants';
+import { safeGetItem, safeSetItem, safeGetJSON, getReadingHistory, getLastReadChapter, deleteBookData, getUseTraditionalChinese, setUseTraditionalChinese } from '../utils/storage';
 import AbstractModal from './AbstractModal';
 import { cleanAbstract, truncateText, MAX_ABSTRACT_LENGTH } from '../utils/text';
 import { maybeConvert } from '../utils/zh-convert';
 import { useConvertedText } from '../hooks/useConvertedText';
 
-import { BookOpen, Search, Info as InfoIcon, Globe, Trash2, List } from 'lucide-react';
+import { BookOpen, Search, Info as InfoIcon, Globe, Trash2, List, Languages } from 'lucide-react';
 
 const NullPageWrapper = styled.div`
   display: flex;
@@ -295,6 +295,7 @@ const ApiSelectWrapper = styled.div`
   gap: 12px;
   font-size: 14px;
   color: var(--text-color-secondary);
+  flex-wrap: wrap;
 
   select {
     background: none;
@@ -313,6 +314,32 @@ const ApiSelectWrapper = styled.div`
     &:focus {
       outline: none;
     }
+  }
+`;
+
+const TranslateButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--background-color);
+  color: ${(p) => (p.$active ? 'var(--accent-color)' : 'var(--text-color)')};
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: var(--hover-background-color);
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
   }
 `;
 
@@ -395,10 +422,10 @@ const HelpCard = styled.div`
   }
 `;
 
-function SavedBookContent({ savedBookInfo }) {
-  const bookName = useConvertedText(savedBookInfo.book_name, undefined);
-  const author = useConvertedText(savedBookInfo.author, undefined);
-  const abstract = useConvertedText(savedBookInfo.abstract ?? '', undefined);
+function SavedBookContent({ savedBookInfo, useTraditionalChinese }) {
+  const bookName = useConvertedText(savedBookInfo.book_name, useTraditionalChinese);
+  const author = useConvertedText(savedBookInfo.author, useTraditionalChinese);
+  const abstract = useConvertedText(savedBookInfo.abstract ?? '', useTraditionalChinese);
   return (
     <>
       <h3 className="title">{bookName}</h3>
@@ -408,11 +435,35 @@ function SavedBookContent({ savedBookInfo }) {
   );
 }
 
+function getBookInfoFromCache(bookId) {
+  try {
+    const directory = safeGetJSON(`${DIRECTORY_CACHE_KEY}-${bookId}`);
+    const detail = safeGetJSON(`${DETAIL_CACHE_KEY}-${bookId}`);
+    const list = directory?.item_data_list ?? [];
+    return {
+      chapterCount: list.length,
+      book_name: detail?.book_name || list[0]?.title || `書籍 ${bookId.slice(0, 8)}`,
+      author: detail?.author || '未知作者',
+      abstract: cleanAbstract(detail?.abstract) || null,
+      audio_thumb_uri: detail?.audio_thumb_uri || null,
+    };
+  } catch {
+    return null;
+  }
+}
+
 function NullPage() {
   const navigate = useNavigate();
   const [apiBase, setApiBaseState] = useState(() => getApiBase());
+  const [useTraditionalChinese, setUseTraditionalChineseState] = useState(getUseTraditionalChinese);
   const [refreshKey, setRefreshKey] = useState(0);
-  const savedBookId = safeGetItem(BOOK_ID_KEY) ?? '';
+  const readingHistory = getReadingHistory();
+
+  const handleTranslateToggle = () => {
+    const next = !useTraditionalChinese;
+    setUseTraditionalChinese(next);
+    setUseTraditionalChineseState(next);
+  };
 
   const handleApiChange = (e) => {
     const url = e.target.value;
@@ -420,47 +471,30 @@ function NullPage() {
     setApiBaseState(url);
   };
 
-  let savedBookInfo = null;
-  if (savedBookId) {
-    try {
-      const directory = safeGetJSON(`${DIRECTORY_CACHE_KEY}-${savedBookId}`);
-      const detail = safeGetJSON(`${DETAIL_CACHE_KEY}-${savedBookId}`);
-      const list = directory?.data?.data?.data?.item_data_list ?? [];
-      savedBookInfo = {
-        chapterCount: list.length,
-        book_name: detail?.book_name || list[0]?.title || `書籍 ${savedBookId.slice(0, 8)}`,
-        author: detail?.author || '未知作者',
-        abstract: cleanAbstract(detail?.abstract) || null,
-        audio_thumb_uri: detail?.audio_thumb_uri || null,
-      };
-    } catch {}
-  }
-
   const handleButtonClick = () => {
     const inputElement = document.getElementById('bookIdInput');
     const bookId = inputElement.value?.trim();
     if (bookId) {
-      safeSetItem(BOOK_ID_KEY, bookId);
       const lastReadItemId = getLastReadChapter(bookId);
       navigate(lastReadItemId ? `/chapter?bookId=${bookId}&itemId=${lastReadItemId}` : `/catalog?bookId=${bookId}`);
     }
   };
 
-  const handleSavedBookClick = () => {
-    const lastReadItemId = getLastReadChapter(savedBookId);
-    navigate(lastReadItemId ? `/chapter?bookId=${savedBookId}&itemId=${lastReadItemId}` : `/catalog?bookId=${savedBookId}`);
+  const handleBookClick = (bookId) => {
+    const lastReadItemId = getLastReadChapter(bookId);
+    navigate(lastReadItemId ? `/chapter?bookId=${bookId}&itemId=${lastReadItemId}` : `/catalog?bookId=${bookId}`);
   };
 
-  const handleCatalogClick = (e) => {
+  const handleCatalogClick = (e, bookId) => {
     e.stopPropagation();
-    navigate(`/catalog?bookId=${savedBookId}`);
+    navigate(`/catalog?bookId=${bookId}`);
   };
 
-  const handleDeleteBook = async (e) => {
+  const handleDeleteBook = async (e, bookId, bookInfo) => {
     e.stopPropagation();
-    const convertedName = maybeConvert(savedBookInfo?.book_name) || savedBookId;
+    const convertedName = maybeConvert(bookInfo?.book_name) || bookId;
     if (window.confirm(`確定要刪除「${convertedName}」的所有本地資料嗎？`)) {
-      deleteBookData(savedBookId);
+      deleteBookData(bookId);
       setRefreshKey((k) => k + 1);
     }
   };
@@ -473,41 +507,47 @@ function NullPage() {
         <Subtitle>無需中國大陸手機號即可閱讀番茄小說</Subtitle>
       </Header>
 
-      {savedBookId && savedBookInfo && (
+      {readingHistory.length > 0 && (
         <Section key={refreshKey}>
-          <SectionTitle><BookOpen /> 最近閱讀</SectionTitle>
-          <SavedBookCard onClick={handleSavedBookClick}>
-            <ActionButtons>
-              <ActionButton
-                type="button"
-                $variant="catalog"
-                onClick={handleCatalogClick}
-                title="目錄"
-                aria-label="前往目錄"
-              >
-                <List />
-              </ActionButton>
-              <ActionButton
-                type="button"
-                $variant="delete"
-                onClick={handleDeleteBook}
-                title="刪除此書的本地資料"
-                aria-label="刪除此書的本地資料"
-              >
-                <Trash2 />
-              </ActionButton>
-            </ActionButtons>
-            {savedBookInfo.audio_thumb_uri && (
-              <img src={savedBookInfo.audio_thumb_uri} alt="封面" />
-            )}
-            <div className="content">
-              <SavedBookContent savedBookInfo={savedBookInfo} />
-              <div className="meta">
-                {savedBookInfo.chapterCount > 0 ? `共 ${savedBookInfo.chapterCount} 章節` : '暫無章節資訊'}
-              </div>
-            </div>
-            <div className="action-hint">繼續閱讀 →</div>
-          </SavedBookCard>
+          <SectionTitle><BookOpen /> 閱讀歷史</SectionTitle>
+          {readingHistory.map(({ bookId }) => {
+            const bookInfo = getBookInfoFromCache(bookId);
+            if (!bookInfo) return null;
+            return (
+              <SavedBookCard key={bookId} onClick={() => handleBookClick(bookId)}>
+                <ActionButtons>
+                  <ActionButton
+                    type="button"
+                    $variant="catalog"
+                    onClick={(e) => handleCatalogClick(e, bookId)}
+                    title="目錄"
+                    aria-label="前往目錄"
+                  >
+                    <List />
+                  </ActionButton>
+                  <ActionButton
+                    type="button"
+                    $variant="delete"
+                    onClick={(e) => handleDeleteBook(e, bookId, bookInfo)}
+                    title="刪除此書的本地資料"
+                    aria-label="刪除此書的本地資料"
+                  >
+                    <Trash2 />
+                  </ActionButton>
+                </ActionButtons>
+                {bookInfo.audio_thumb_uri && (
+                  <img src={bookInfo.audio_thumb_uri} alt="封面" />
+                )}
+                <div className="content">
+                  <SavedBookContent savedBookInfo={bookInfo} useTraditionalChinese={useTraditionalChinese} />
+                  <div className="meta">
+                    {bookInfo.chapterCount > 0 ? `共 ${bookInfo.chapterCount} 章節` : '暫無章節資訊'}
+                  </div>
+                </div>
+                <div className="action-hint">繼續閱讀 →</div>
+              </SavedBookCard>
+            );
+          })}
         </Section>
       )}
 
@@ -515,12 +555,12 @@ function NullPage() {
         <SectionTitle><Search /> 開始新閱讀</SectionTitle>
         <InputGroup>
           <Form onSubmit={(e) => { e.preventDefault(); handleButtonClick(); }}>
-            <input 
-              key={savedBookId || 'empty'}
-              id="bookIdInput" 
-              type="text" 
-              placeholder="貼上書籍 bookId 或 URL" 
-              defaultValue={savedBookId} 
+            <input
+              key={refreshKey}
+              id="bookIdInput"
+              type="text"
+              placeholder="貼上書籍 bookId 或 URL"
+              defaultValue=""
             />
             <button type="submit">開始閱讀</button>
           </Form>
@@ -534,6 +574,15 @@ function NullPage() {
                 </option>
               ))}
             </select>
+            <TranslateButton
+              type="button"
+              $active={useTraditionalChinese}
+              onClick={handleTranslateToggle}
+              title={useTraditionalChinese ? '切換為簡體中文' : '切換為繁體中文'}
+            >
+              <Languages size={16} strokeWidth={2.5} />
+              {useTraditionalChinese ? '繁體' : '简体'}
+            </TranslateButton>
           </ApiSelectWrapper>
         </InputGroup>
       </Section>

@@ -10,7 +10,6 @@ import LoadingPage from '../components/LoadingPage';
 import HomeButton from '../components/HomeButton';
 import { IconButton } from '../components/IconButton';
 import styled from 'styled-components';
-import { BOOK_ID_KEY } from '../utils/constants';
 
 const CatalogWrapper = styled.div`
   min-height: 100dvh;
@@ -20,7 +19,7 @@ const CatalogWrapper = styled.div`
   background-color: var(--background-color);
   padding-bottom: env(safe-area-inset-bottom);
 `;
-import { safeSetItem, getLastReadChapter, getUseTraditionalChinese, setUseTraditionalChinese } from '../utils/storage';
+import { getLastReadChapter, getUseTraditionalChinese, setUseTraditionalChinese } from '../utils/storage';
 import { formatErrorMessage } from '../utils/errors';
 import { fetchBookWithDetail } from '../utils/api-helpers';
 
@@ -98,7 +97,6 @@ function Catalog() {
     fetchBookWithDetail(bookId, { forceRefresh, catalogOnly: forceRefresh })
       .then((merged) => {
         setBookInfo(merged);
-        safeSetItem(BOOK_ID_KEY, bookId);
       })
       .catch((err) => {
         console.error('獲取圖書資訊失敗：', err);

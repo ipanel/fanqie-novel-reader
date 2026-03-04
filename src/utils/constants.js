@@ -1,9 +1,9 @@
-export const BOOK_ID_KEY = 'fanqie-bookId';
 export const DIRECTORY_CACHE_KEY = 'fanqie-directory';
 export const CHAPTER_CACHE_KEY = 'fanqie-chapter';
 export const DETAIL_CACHE_KEY = 'fanqie-detail';
 export const API_BASE_KEY = 'fanqie-api-base';
-export const LAST_READ_CHAPTERS_KEY = 'fanqie-lastChapters';
+export const READING_HISTORY_KEY = 'fanqie-readingHistory';
+export const READING_HISTORY_MAX = 50;
 export const FONT_SIZE_KEY = 'fanqie-fontSize';
 export const FONT_SIZE_MIN = 18;
 export const FONT_SIZE_MAX = 48;

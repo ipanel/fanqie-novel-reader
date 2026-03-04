@@ -1,9 +1,9 @@
 import {
-  BOOK_ID_KEY,
   DIRECTORY_CACHE_KEY,
   DETAIL_CACHE_KEY,
   CHAPTER_CACHE_KEY,
-  LAST_READ_CHAPTERS_KEY,
+  READING_HISTORY_KEY,
+  READING_HISTORY_MAX,
   FONT_SIZE_KEY,
   FONT_SIZE_MIN,
   FONT_SIZE_MAX,
@@ -64,28 +64,32 @@ export function safeRemoveItem(key) {
 export function deleteBookData(bookId) {
   if (!bookId) return;
   const directory = safeGetJSON(`${DIRECTORY_CACHE_KEY}-${bookId}`);
-  const itemIds = directory?.data?.data?.data?.item_data_list?.map((item) => item.item_id) ?? [];
+  const itemIds = directory?.item_data_list?.map((item) => item.item_id) ?? [];
   safeRemoveItem(`${DIRECTORY_CACHE_KEY}-${bookId}`);
   safeRemoveItem(`${DETAIL_CACHE_KEY}-${bookId}`);
   itemIds.forEach((itemId) => safeRemoveItem(`${CHAPTER_CACHE_KEY}-${itemId}`));
-  const lastChapters = safeGetJSON(LAST_READ_CHAPTERS_KEY) || {};
-  delete lastChapters[bookId];
-  safeSetJSON(LAST_READ_CHAPTERS_KEY, lastChapters);
-  if (safeGetItem(BOOK_ID_KEY) === bookId) {
-    safeRemoveItem(BOOK_ID_KEY);
-  }
+  const history = getReadingHistory().filter((e) => e.bookId !== bookId);
+  safeSetJSON(READING_HISTORY_KEY, history);
+}
+
+export function getReadingHistory() {
+  const raw = safeGetJSON(READING_HISTORY_KEY);
+  return Array.isArray(raw) ? raw : [];
 }
 
 export function getLastReadChapter(bookId) {
-  const data = safeGetJSON(LAST_READ_CHAPTERS_KEY);
-  return data && bookId ? data[bookId] ?? null : null;
+  if (!bookId) return null;
+  const entry = getReadingHistory().find((e) => e.bookId === bookId);
+  return entry ? entry.itemId : null;
 }
 
 export function setLastReadChapter(bookId, itemId) {
   if (!bookId || !itemId) return false;
-  const data = safeGetJSON(LAST_READ_CHAPTERS_KEY) || {};
-  data[bookId] = String(itemId);
-  return safeSetJSON(LAST_READ_CHAPTERS_KEY, data);
+  const now = Date.now();
+  let history = getReadingHistory().filter((e) => e.bookId !== bookId);
+  history.unshift({ bookId: String(bookId), itemId: String(itemId), lastReadAt: now });
+  history = history.slice(0, READING_HISTORY_MAX);
+  return safeSetJSON(READING_HISTORY_KEY, history);
 }
 
 export function getFontSize() {
