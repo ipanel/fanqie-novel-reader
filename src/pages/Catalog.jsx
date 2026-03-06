@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSearchParams, Navigate, useNavigate, Link } from 'react-router-dom';
-import { Bookmark, Languages, RefreshCw } from 'lucide-react';
+import { Bookmark, Download, Languages, RefreshCw } from 'lucide-react';
 import Menu from '../components/Menu';
 import Info from '../components/Info';
 import Error from '../components/Error';
@@ -21,9 +21,11 @@ const CatalogWrapper = styled.div`
   background-color: var(--background-color);
   padding-bottom: env(safe-area-inset-bottom);
 `;
-import { getLastReadChapter } from '../utils/storage';
+import { getLastReadChapter, isChapterCached } from '../utils/storage';
 import { useTraditionalChineseToggle } from '../hooks/useTraditionalChineseToggle';
 import { useBookLoader } from '../hooks/useBookLoader';
+import { useDownloadManager } from '../contexts/DownloadManager';
+import { MAX_CONCURRENT_DOWNLOADS } from '../utils/constants';
 
 const BackBar = styled.div`
   display: flex;
@@ -76,8 +78,20 @@ function Catalog() {
   const lastReadItemId = bookId ? getLastReadChapter(bookId) : null;
   
   const { error, bookInfo, loadBook } = useBookLoader(bookId);
+  const { addToQueue, isDownloading } = useDownloadManager();
   const [sortOrder, setSortOrder] = useState('ascending');
   const [useTraditionalChinese, toggleTraditionalChinese] = useTraditionalChineseToggle();
+
+  const itemDataList = bookInfo?.item_data_list ?? [];
+  const uncachedItemIds = itemDataList.filter((item) => !isChapterCached(item.item_id)).map((item) => item.item_id);
+  const hasUncachedChapters = uncachedItemIds.length > 0;
+  const anyDownloading = uncachedItemIds.some((id) => isDownloading(id));
+  const batchSize = Math.min(MAX_CONCURRENT_DOWNLOADS, uncachedItemIds.length);
+
+  const handleBatchDownload = () => {
+    const batch = uncachedItemIds.slice(0, MAX_CONCURRENT_DOWNLOADS);
+    batch.forEach((itemId) => addToQueue(itemId, false));
+  };
 
   const handleSortChange = () => {
     setSortOrder(sortOrder === 'ascending' ? 'descending' : 'ascending');
@@ -106,6 +120,14 @@ function Catalog() {
             style={useTraditionalChinese ? { color: 'var(--accent-color)' } : undefined}
           >
             <Languages size={20} strokeWidth={2.5} />
+          </IconButton>
+          <IconButton
+            type="button"
+            title={hasUncachedChapters ? `批次下載 (${batchSize} 章)` : '全部已下載'}
+            onClick={handleBatchDownload}
+            disabled={!hasUncachedChapters || anyDownloading}
+          >
+            <Download size={20} strokeWidth={2.5} />
           </IconButton>
           <IconButton
             type="button"
