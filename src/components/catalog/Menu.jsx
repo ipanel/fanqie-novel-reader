@@ -7,6 +7,7 @@ import { useDownloadManager } from '../../contexts/DownloadManager';
 import { isChapterCached } from '../../utils/storage';
 import { IconButton } from '../common/IconButton';
 import { buildChapterUrl } from '../../utils/navigation';
+import { getChapterTitle } from '../../utils/chapter-helpers';
 import Status from './Status';
 import { sortChaptersByNumber } from '../../utils/sorting';
 
@@ -127,7 +128,7 @@ function Menu({ itemDataList, sortOrder, bookId, useTraditionalChinese = false }
 }
 
 function MenuItemLink({ item, bookId, useTraditionalChinese, isDownloading }) {
-  const convertedTitle = useConvertedText(item.title, useTraditionalChinese);
+  const convertedTitle = useConvertedText(getChapterTitle(item), useTraditionalChinese);
 
   if (isDownloading) {
     return (

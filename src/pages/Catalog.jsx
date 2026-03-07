@@ -9,6 +9,8 @@ import PageWrapper from '../components/common/PageWrapper';
 import TopBar from '../components/catalog/TopBar';
 import styled from 'styled-components';
 import { getLastReadChapter, isChapterCached } from '../utils/storage';
+import { sortChaptersByNumber } from '../utils/sorting';
+import { exportBookToTxt } from '../utils/exportBookTxt';
 import { useTraditionalChineseToggle } from '../hooks/useTraditionalChineseToggle';
 import { useBookLoader } from '../hooks/useBookLoader';
 import { useDownloadManager } from '../contexts/DownloadManager';
@@ -57,6 +59,17 @@ function Catalog() {
     setSortOrder(sortOrder === 'ascending' ? 'descending' : 'ascending');
   };
 
+  const handleExportTxt = () => {
+    const list = bookInfo?.item_data_list ?? [];
+    const sorted = sortChaptersByNumber(list, sortOrder);
+    exportBookToTxt({
+      bookId,
+      bookInfo,
+      itemDataList: sorted,
+      useTraditionalChinese,
+    });
+  };
+
   if (!bookId) {
     return <Navigate to="/" replace />;
   }
@@ -84,6 +97,7 @@ function Catalog() {
           onBatchDownload={handleBatchDownload}
           onDownloadAll={handleDownloadAll}
           onReload={() => loadBook(true)}
+          onExportTxt={handleExportTxt}
           lastReadItemId={lastReadItemId}
         />
       )}

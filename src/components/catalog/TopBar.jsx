@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpDown, Bookmark, CloudDownload, Download, Languages, MessageCircle, RefreshCw } from 'lucide-react';
+import { ArrowUpDown, Bookmark, CloudDownload, Download, FileText, Languages, MessageCircle, RefreshCw } from 'lucide-react';
 import TopBarBase from '../common/TopBarBase';
 import HomeButton from '../common/HomeButton';
 import { IconButton } from '../common/IconButton';
@@ -20,6 +20,7 @@ function TopBar({
   onBatchDownload,
   onDownloadAll,
   onReload,
+  onExportTxt,
   lastReadItemId,
 }) {
   return (
@@ -57,6 +58,13 @@ function TopBar({
         style={downloadingAll ? { color: 'var(--accent-color)' } : undefined}
       >
         <CloudDownload size={20} strokeWidth={2.5} />
+      </IconButton>
+      <IconButton
+        type="button"
+        title="匯出為 TXT（僅包含已下載章節）"
+        onClick={onExportTxt}
+      >
+        <FileText size={20} strokeWidth={2.5} />
       </IconButton>
       <IconButton
         type="button"

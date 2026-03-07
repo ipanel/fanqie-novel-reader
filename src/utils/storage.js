@@ -135,9 +135,9 @@ export function getUseTraditionalChinese() {
 export function setUseTraditionalChinese(enabled) {
   return safeSetItem(TRADITIONAL_CHINESE_KEY, enabled ? '1' : '0');
 }
-
 export function isChapterCached(itemId) {
   if (!itemId) return false;
   const raw = safeGetJSON(`${CHAPTER_CACHE_KEY}-${itemId}`);
   return raw != null;
 }
+
