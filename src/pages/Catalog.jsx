@@ -5,6 +5,7 @@ import Info from '../components/book/Info';
 import Error from '../components/common/Error';
 import Header from '../components/common/Header';
 import Loading from '../components/common/Loading';
+import PageWrapper from '../components/common/PageWrapper';
 import TopBar from '../components/catalog/TopBar';
 import styled from 'styled-components';
 import { getLastReadChapter, isChapterCached } from '../utils/storage';
@@ -12,15 +13,6 @@ import { useTraditionalChineseToggle } from '../hooks/useTraditionalChineseToggl
 import { useBookLoader } from '../hooks/useBookLoader';
 import { useDownloadManager } from '../contexts/DownloadManager';
 import { MAX_CONCURRENT_DOWNLOADS } from '../utils/constants';
-
-const Wrapper = styled.div`
-  min-height: 100dvh;
-  min-height: 100vh;
-  overflow-x: hidden;
-  width: 100%;
-  background-color: var(--background-color);
-  padding-bottom: env(safe-area-inset-bottom);
-`;
 
 const Content = styled.div`
   padding-top: calc(76px + env(safe-area-inset-top));
@@ -74,7 +66,7 @@ function Catalog() {
   }
 
   return (
-    <Wrapper>
+    <PageWrapper>
       <Header bookInfo={bookInfo} />
       {bookInfo && (
         <TopBar
@@ -105,7 +97,7 @@ function Catalog() {
       ) : (
         <Loading onAbort={() => navigate('/')} />
       )}
-    </Wrapper>
+    </PageWrapper>
   );
 }
 

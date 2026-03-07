@@ -1,27 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, Navigate, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import { fetchComments } from '../services/api';
 import { useBookLoader } from '../hooks/useBookLoader';
 import { buildCatalogUrl } from '../utils/navigation';
 import Error from '../components/common/Error';
 import Loading from '../components/common/Loading';
 import Header from '../components/common/Header';
+import PageWrapper from '../components/common/PageWrapper';
 import TopBar from '../components/comments/TopBar';
 import Content from '../components/comments/Content';
 import { useTraditionalChineseToggle } from '../hooks/useTraditionalChineseToggle';
 import { useConvertedText } from '../hooks/useConvertedText';
 
 const COMMENTS_PER_PAGE = 20;
-
-const Wrapper = styled.div`
-  min-height: 100dvh;
-  min-height: 100vh;
-  overflow-x: hidden;
-  width: 100%;
-  background-color: var(--background-color);
-  padding-bottom: env(safe-area-inset-bottom);
-`;
 
 function Comments() {
   const [searchParams] = useSearchParams();
@@ -88,7 +79,7 @@ function Comments() {
   }
 
   return (
-    <Wrapper>
+    <PageWrapper>
       <Header bookInfo={bookInfo} />
       {loading ? (
         <Loading onAbort={() => navigate(buildCatalogUrl(bookId))} />
@@ -116,7 +107,7 @@ function Comments() {
           />
         </>
       )}
-    </Wrapper>
+    </PageWrapper>
   );
 }
 

@@ -1,24 +1,16 @@
 import { useEffect, useCallback } from 'react';
 import { useSearchParams, Navigate, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import TopBar from '../components/chapter/TopBar';
 import BottomBar from '../components/chapter/BottomBar';
 import Reader from '../components/chapter/Reader';
 import Error from '../components/common/Error';
 import Header from '../components/common/Header';
 import Loading from '../components/common/Loading';
+import PageWrapper from '../components/common/PageWrapper';
 import { useTraditionalChineseToggle } from '../hooks/useTraditionalChineseToggle';
 import { useFontSize, useTextBrightness } from '../hooks/useTextSettings';
 import { useChapterLoader } from '../hooks/useChapterLoader';
 import { buildCatalogUrl } from '../utils/navigation';
-
-const Wrapper = styled.div`
-  background-color: var(--background-color);
-  min-height: 100dvh;
-  min-height: 100vh;
-  overflow-x: hidden;
-  width: 100%;
-`;
 
 function Chapter() {
   const [searchParams] = useSearchParams();
@@ -53,7 +45,7 @@ function Chapter() {
   }
 
   return (
-    <Wrapper>
+    <PageWrapper $withBottomPadding={false}>
       {loading ? (
         <Loading onAbort={() => navigate('/')} />
       ) : (
@@ -78,7 +70,7 @@ function Chapter() {
           )}
         </>
       )}
-    </Wrapper>
+    </PageWrapper>
   );
 }
 

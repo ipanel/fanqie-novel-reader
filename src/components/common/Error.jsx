@@ -26,13 +26,19 @@ const StyledHomeButton = styled(GrayButton)`
   margin-top: 8px;
 `;
 
+function getBackLabel(href) {
+  if (href === '/') return '返回首頁';
+  if (/^\/catalog\/.+/.test(href)) return '返回目錄';
+  return '返回';
+}
+
 function Error({ message, href = '/' }) {
   const navigate = useNavigate();
   return (
     <ErrorWrapper role="alert">
-      <ErrorText dangerouslySetInnerHTML={{ __html: message }} />
+      <ErrorText>{message}</ErrorText>
       <StyledHomeButton type="button" onClick={() => navigate(href)}>
-        返回首頁
+        {getBackLabel(href)}
       </StyledHomeButton>
     </ErrorWrapper>
   );

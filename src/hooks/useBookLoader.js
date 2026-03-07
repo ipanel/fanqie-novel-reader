@@ -24,7 +24,7 @@ export function useBookLoader(bookId, { detailOnly = false } = {}) {
         console.error('獲取圖書資訊失敗：', err);
         const msg = formatErrorMessage(
           err,
-          '獲取圖書資訊失敗，請檢查<span>bookId</span>是否正確，或者稍後再試。'
+          '獲取圖書資訊失敗，請檢查 bookId 是否正確，或者稍後再試。'
         );
         setError(msg);
       });
@@ -39,11 +39,19 @@ export function useBookLoader(bookId, { detailOnly = false } = {}) {
   const refetch = useCallback(() => {
     if (!bookId || !detailOnly) return;
     setIsRefreshing(true);
+    setError(null);
     fetchBookDetailAndDirectory(bookId, { forceRefresh: true })
       .then((merged) => {
         setBookInfo(normalizeBookInfo(merged, bookId));
       })
-      .catch(() => {})
+      .catch((err) => {
+        console.error('獲取圖書資訊失敗：', err);
+        const msg = formatErrorMessage(
+          err,
+          '獲取圖書資訊失敗，請檢查 bookId 是否正確，或者稍後再試。'
+        );
+        setError(msg);
+      })
       .finally(() => {
         setIsRefreshing(false);
       });
@@ -51,12 +59,20 @@ export function useBookLoader(bookId, { detailOnly = false } = {}) {
 
   useEffect(() => {
     if (detailOnly && bookId) {
+      setError(null);
       fetchBookDetail(bookId)
         .then((detail) => {
           const merged = { book_info: detail, item_data_list: [] };
           setBookInfo(normalizeBookInfo(merged, bookId));
         })
-        .catch(() => {});
+        .catch((err) => {
+          console.error('獲取圖書資訊失敗：', err);
+          const msg = formatErrorMessage(
+            err,
+            '獲取圖書資訊失敗，請檢查 bookId 是否正確，或者稍後再試。'
+          );
+          setError(msg);
+        });
     }
   }, [detailOnly, bookId]);
 
