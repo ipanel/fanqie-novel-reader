@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams, Navigate, useNavigate } from 'react-router-dom';
 import Menu from '../components/catalog/Menu';
 import Info from '../components/book/Info';
@@ -16,6 +16,8 @@ import { useTraditionalChineseToggle } from '../hooks/useTraditionalChineseToggl
 import { useBookLoader } from '../hooks/useBookLoader';
 import { useDownloadManager } from '../contexts/DownloadManager';
 import { MAX_CONCURRENT_DOWNLOADS } from '../utils/constants';
+
+const CHAPTERS_PER_PAGE = 50;
 
 const Content = styled.div`
   padding-top: calc(76px + env(safe-area-inset-top));
@@ -37,9 +39,23 @@ function Catalog() {
   const [sortOrder, setSortOrder] = useState('ascending');
   const [useTraditionalChinese, toggleTraditionalChinese] = useTraditionalChineseToggle();
   const [, setCatalogRefresh] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
   const onChapterDeleted = () => setCatalogRefresh((k) => k + 1);
 
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [bookId]);
+
   const itemDataList = bookInfo?.item_data_list ?? [];
+  const totalChapters = itemDataList.length;
+  const totalPages = Math.max(1, Math.ceil(totalChapters / CHAPTERS_PER_PAGE));
+
+  useEffect(() => {
+    if (currentPage >= totalPages) {
+      setCurrentPage(Math.max(0, totalPages - 1));
+    }
+  }, [currentPage, totalPages]);
+
   const uncachedItemIds = itemDataList.filter((item) => !isChapterCached(item.item_id)).map((item) => item.item_id);
   const hasUncachedChapters = uncachedItemIds.length > 0;
   const anyDownloading = uncachedItemIds.some((id) => isDownloading(id));
@@ -61,7 +77,11 @@ function Catalog() {
 
   const handleSortChange = () => {
     setSortOrder(sortOrder === 'ascending' ? 'descending' : 'ascending');
+    setCurrentPage(0);
   };
+
+  const canGoPrev = currentPage > 0;
+  const canGoNext = currentPage < totalPages - 1;
 
   const handleExportTxt = () => {
     const list = bookInfo?.item_data_list ?? [];
@@ -106,13 +126,19 @@ function Catalog() {
           onReload={() => loadBook(true)}
           onExportTxt={handleExportTxt}
           lastReadItemId={lastReadItemId}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          canGoPrev={canGoPrev}
+          canGoNext={canGoNext}
+          onPagePrev={() => setCurrentPage((p) => Math.max(0, p - 1))}
+          onPageNext={() => setCurrentPage((p) => Math.min(totalPages - 1, p + 1))}
         />
       )}
       {bookInfo ? (
         <Content>
           <Info bookInfo={bookInfo} useTraditionalChinese={useTraditionalChinese} />
           {bookInfo.item_data_list && (
-            <Menu sortOrder={sortOrder} itemDataList={bookInfo.item_data_list} bookId={bookId} useTraditionalChinese={useTraditionalChinese} onChapterDeleted={onChapterDeleted} />
+            <Menu sortOrder={sortOrder} itemDataList={bookInfo.item_data_list} bookId={bookId} useTraditionalChinese={useTraditionalChinese} onChapterDeleted={onChapterDeleted} currentPage={currentPage} chaptersPerPage={CHAPTERS_PER_PAGE} />
           )}
         </Content>
       ) : (

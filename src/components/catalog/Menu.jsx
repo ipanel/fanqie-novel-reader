@@ -110,13 +110,15 @@ const MenuItem = styled.li`
   }
 `;
 
-function Menu({ itemDataList, sortOrder, bookId, useTraditionalChinese = false, onChapterDeleted }) {
+function Menu({ itemDataList, sortOrder, bookId, useTraditionalChinese = false, onChapterDeleted, currentPage = 0, chaptersPerPage = 50 }) {
   const { isDownloading } = useDownloadManager();
   const sortedItems = sortChaptersByNumber(itemDataList, sortOrder);
+  const start = currentPage * chaptersPerPage;
+  const paginatedItems = sortedItems.slice(start, start + chaptersPerPage);
 
   return (
     <MenuList>
-      {sortedItems.map((item) => (
+      {paginatedItems.map((item) => (
         <MenuItem key={item.item_id}>
           <MenuItemLink item={item} bookId={bookId} useTraditionalChinese={useTraditionalChinese} isDownloading={isDownloading(item.item_id)} />
           <ChapterActions item={item} onChapterDeleted={onChapterDeleted} />

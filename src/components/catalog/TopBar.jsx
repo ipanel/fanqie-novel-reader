@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpDown, Bookmark, CloudDownload, Download, FileText, Languages, MessageCircle, RefreshCw } from 'lucide-react';
+import { ArrowUpDown, Bookmark, ChevronLeft, ChevronRight, CloudDownload, Download, FileText, Languages, MessageCircle, RefreshCw } from 'lucide-react';
 import TopBarBase from '../common/TopBarBase';
 import HomeButton from '../common/HomeButton';
 import { IconButton } from '../common/IconButton';
@@ -22,10 +22,36 @@ function TopBar({
   onReload,
   onExportTxt,
   lastReadItemId,
+  currentPage = 0,
+  totalPages = 1,
+  canGoPrev = false,
+  canGoNext = false,
+  onPagePrev = () => {},
+  onPageNext = () => {},
 }) {
   return (
     <TopBarBase>
       <HomeButton />
+      {totalPages > 1 && (
+        <>
+          <IconButton
+            type="button"
+            title={`上一頁 (${currentPage + 1}/${totalPages})`}
+            onClick={onPagePrev}
+            disabled={!canGoPrev}
+          >
+            <ChevronLeft size={20} strokeWidth={2.5} />
+          </IconButton>
+          <IconButton
+            type="button"
+            title={`下一頁 (${currentPage + 1}/${totalPages})`}
+            onClick={onPageNext}
+            disabled={!canGoNext}
+          >
+            <ChevronRight size={20} strokeWidth={2.5} />
+          </IconButton>
+        </>
+      )}
       <IconButton
         type="button"
         title={sortOrder === 'ascending' ? '升序排列 (點擊切換為降序)' : '降序排列 (點擊切換為升序)'}
