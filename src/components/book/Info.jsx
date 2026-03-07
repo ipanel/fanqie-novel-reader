@@ -286,7 +286,7 @@ function Info({ bookInfo, useTraditionalChinese = false, variant, footer }) {
   const isMobile = useMediaQuery('(max-width: 480px)');
   
   const bookInfoData = bookInfo?.book_info || bookInfo || {};
-  const { original_book_name, author, thumb_url, abstract, tags, score, category, sub_info, word_number, creation_status, last_publish_time } = bookInfoData;
+  const { original_book_name, author, audio_thumb_uri, abstract, tags, score, category, sub_info, word_number, creation_status, last_publish_time } = bookInfoData;
   const chapter_count = bookInfo?.chapter_count ?? null;
 
   const convertedAbstract = useConvertedText(abstract, useTraditionalChinese);
@@ -310,9 +310,9 @@ function Info({ bookInfo, useTraditionalChinese = false, variant, footer }) {
 
   return (
     <InfoWrapper className={wrapperClass}>
-{thumb_url && (
+{audio_thumb_uri && (
           <CoverWrapper>
-          <img src={thumb_url} alt="書籍封面" width="128" height="128" />
+          <img src={audio_thumb_uri} alt="書籍封面" width="128" height="128" />
           <CoverMeta>
             {chapter_count ? `共 ${chapter_count} 章節` : '暫無章節資訊'}
           </CoverMeta>
@@ -333,7 +333,7 @@ function Info({ bookInfo, useTraditionalChinese = false, variant, footer }) {
           {truncated}
         </Abstract>
         <MetaRow>
-          {!thumb_url && (
+          {!audio_thumb_uri && (
             <MetaTag className="meta-chapters">{chapter_count ? `共 ${chapter_count} 章節` : '暫無章節資訊'}</MetaTag>
           )}
           {score && (

@@ -94,7 +94,7 @@ export async function fetchBookDetail(bookId, { forceRefresh = false, signal } =
   const result = {
     abstract: d.abstract || null,
     author: d.author || null,
-    thumb_url: d.thumb_url || null,
+    audio_thumb_uri: d.audio_thumb_uri || null,
     original_book_name: d.original_book_name || null,
     score: d.score || null,
     tags: d.tags || null,

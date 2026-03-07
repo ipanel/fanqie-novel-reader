@@ -36,7 +36,7 @@ export function normalizeBookInfo(raw, bookId) {
     original_book_name: book_info.original_book_name || `書籍 ${(bookId || '').slice(0, 8)}`,
     author: book_info.author || '未知作者',
     abstract: cleanAbstract(book_info.abstract) || null,
-    thumb_url: book_info.thumb_url || null,
+    audio_thumb_uri: book_info.audio_thumb_uri || null,
     score: (book_info.score === '0') ? null : (book_info.score || null),
     tags: book_info.tags || null,
     category: book_info.category || null,
