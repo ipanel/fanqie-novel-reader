@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { fetchItem } from '../api';
+import { fetchItem } from '../services/api';
 import { fetchBookDetailAndDirectory } from '../utils/api-helpers';
 import { buildNovelDataFromDirectory } from '../utils/chapter-helpers';
 import { setLastReadChapter } from '../utils/storage';

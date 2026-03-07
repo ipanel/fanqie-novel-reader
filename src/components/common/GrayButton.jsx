@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const SecondaryButton = styled.button`
+export const GrayButton = styled.button`
   padding: 10px 20px;
   font-size: 0.9rem;
   color: var(--text-color-secondary);

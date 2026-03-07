@@ -1,18 +1,18 @@
 import { useEffect, useCallback } from 'react';
 import { useSearchParams, Navigate, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import TopBar from '../components/TopBar';
-import BottomBar from '../components/BottomBar';
-import Main from '../components/Main';
-import Error from '../components/Error';
-import MyHead from '../components/MyHead';
-import LoadingPage from '../components/LoadingPage';
+import TopBar from '../components/chapter/TopBar';
+import BottomBar from '../components/chapter/BottomBar';
+import Reader from '../components/chapter/Reader';
+import Error from '../components/common/Error';
+import Header from '../components/common/Header';
+import Loading from '../components/common/Loading';
 import { useTraditionalChineseToggle } from '../hooks/useTraditionalChineseToggle';
 import { useFontSize, useTextBrightness } from '../hooks/useTextSettings';
 import { useChapterLoader } from '../hooks/useChapterLoader';
 import { buildCatalogUrl } from '../utils/navigation';
 
-const ChapterWrapper = styled.div`
+const Wrapper = styled.div`
   background-color: var(--background-color);
   min-height: 100dvh;
   min-height: 100vh;
@@ -53,12 +53,12 @@ function Chapter() {
   }
 
   return (
-    <ChapterWrapper>
+    <Wrapper>
       {loading ? (
-        <LoadingPage onAbort={() => navigate('/')} />
+        <Loading onAbort={() => navigate('/')} />
       ) : (
         <>
-          <MyHead bookInfo={bookInfo} chapterData={chapterData} />
+          <Header bookInfo={bookInfo} chapterData={chapterData} />
           {chapterData && (
             <>
               <TopBar
@@ -72,13 +72,13 @@ function Chapter() {
                 onTraditionalChineseToggle={handleTraditionalChineseToggle}
                 onRefresh={handleRefresh}
               />
-              <Main chapterData={chapterData} fontSize={fontSize} textBrightness={textBrightness} />
+              <Reader chapterData={chapterData} fontSize={fontSize} textBrightness={textBrightness} />
               <BottomBar chapterData={chapterData} bookId={bookId} />
             </>
           )}
         </>
       )}
-    </ChapterWrapper>
+    </Wrapper>
   );
 }
 

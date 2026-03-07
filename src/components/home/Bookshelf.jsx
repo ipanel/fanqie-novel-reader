@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { BookOpen } from 'lucide-react';
-import SavedBookCard from './SavedBookCard';
-import { getLastReadChapter, getReadingHistory } from '../utils/storage';
+import BookCard from './BookCard';
+import { getLastReadChapter, getReadingHistory } from '../../utils/storage';
 
 const Section = styled.section`
   display: flex;
@@ -29,7 +29,7 @@ const SectionTitle = styled.h2`
   }
 `;
 
-function ReadingHistory({ refreshKey, onBookClick, onCatalogClick, onCommentClick, onDeleteClick, useTraditionalChinese }) {
+function Bookshelf({ refreshKey, onBookClick, onCatalogClick, onCommentClick, onDeleteClick, useTraditionalChinese }) {
   const readingHistory = getReadingHistory();
 
   if (readingHistory.length === 0) {
@@ -44,7 +44,7 @@ function ReadingHistory({ refreshKey, onBookClick, onCatalogClick, onCommentClic
         const actionHint = lastReadItemId ? '繼續閱讀 →' : '前往目錄 →';
 
         return (
-          <SavedBookCard
+          <BookCard
             key={bookId}
             bookId={bookId}
             actionHint={actionHint}
@@ -60,4 +60,4 @@ function ReadingHistory({ refreshKey, onBookClick, onCatalogClick, onCommentClic
   );
 }
 
-export default ReadingHistory;
+export default Bookshelf;

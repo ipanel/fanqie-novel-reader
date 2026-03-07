@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { SecondaryButton } from './common/Button';
+import { GrayButton } from './GrayButton';
 
 const ErrorWrapper = styled.div`
   display: flex;
@@ -22,7 +22,7 @@ const ErrorText = styled.p`
   word-break: break-word;
 `;
 
-const StyledHomeButton = styled(SecondaryButton)`
+const StyledHomeButton = styled(GrayButton)`
   margin-top: 8px;
 `;
 

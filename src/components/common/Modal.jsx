@@ -47,7 +47,7 @@ const ModalButton = styled.button`
   font-size: 14px;
 `;
 
-function AbstractModal({ text, onClose }) {
+function Modal({ text, onClose }) {
   return (
     <ModalOverlay onClick={onClose}>
       <ModalContent onClick={(e) => e.stopPropagation()}>
@@ -60,4 +60,4 @@ function AbstractModal({ text, onClose }) {
   );
 }
 
-export default AbstractModal;
+export default Modal;

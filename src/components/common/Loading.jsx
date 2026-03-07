@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { SecondaryButton } from './common/Button';
+import { GrayButton } from './GrayButton';
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -51,11 +51,11 @@ const Spinner = styled.div`
   margin: 0 auto;
 `;
 
-const AbortButton = styled(SecondaryButton)`
+const AbortButton = styled(GrayButton)`
   margin-top: 16px;
 `;
 
-function LoadingPage({ onAbort }) {
+function Loading({ onAbort }) {
   const [seconds, setSeconds] = useState(0);
 
   useEffect(() => {
@@ -77,4 +77,4 @@ function LoadingPage({ onAbort }) {
   );
 }
 
-export default LoadingPage;
+export default Loading;

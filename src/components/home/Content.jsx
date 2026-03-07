@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { deleteBookData, getLastReadChapter } from '../utils/storage';
-import { useTraditionalChineseToggle } from '../hooks/useTraditionalChineseToggle';
-import { maybeConvert } from '../utils/zh-convert';
-import { buildChapterOrCatalogUrl, buildCatalogUrl, buildCommentsUrl } from '../utils/navigation';
-import ReadingHistory from './ReadingHistory';
-import BookInputSection from './BookInputSection';
-import HelpSection from './HelpSection';
+import { deleteBookData, getLastReadChapter } from '../../utils/storage';
+import { useTraditionalChineseToggle } from '../../hooks/useTraditionalChineseToggle';
+import { maybeConvert } from '../../utils/zh-convert';
+import { buildChapterOrCatalogUrl, buildCatalogUrl, buildCommentsUrl } from '../../utils/navigation';
+import Bookshelf from './Bookshelf';
+import AddBook from './AddBook';
+import Help from './Help';
 
-const NullPageWrapper = styled.div`
+const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -59,7 +59,7 @@ const Subtitle = styled.p`
   margin: 0;
 `;
 
-function NullPage() {
+function Content() {
   const navigate = useNavigate();
   const [refreshKey, setRefreshKey] = useState(0);
   const [useTraditionalChinese, toggleTraditionalChinese] = useTraditionalChineseToggle();
@@ -87,7 +87,7 @@ function NullPage() {
   const handleDeleteBook = (e, bookId, bookInfo) => {
     e.stopPropagation();
     const bookName = bookInfo?.book_info?.original_book_name ?? bookInfo?.original_book_name;
-    const convertedName = maybeConvert(bookName) || bookId;
+    const convertedName = maybeConvert(bookName, useTraditionalChinese) || bookId;
     if (window.confirm(`確定要刪除「${convertedName}」的所有本地資料嗎？`)) {
       deleteBookData(bookId);
       setRefreshKey((k) => k + 1);
@@ -95,14 +95,14 @@ function NullPage() {
   };
 
   return (
-    <NullPageWrapper>
+    <ContentWrapper>
       <Header>
         <Title>番茄小說閱讀器</Title>
         <Subtitle>本地儲存、免註冊、免登入、無廣告</Subtitle>
         <Subtitle>無需中國大陸手機號即可閱讀番茄小說</Subtitle>
       </Header>
 
-      <ReadingHistory
+      <Bookshelf
         refreshKey={refreshKey}
         onBookClick={handleBookClick}
         onCatalogClick={handleCatalogClick}
@@ -111,16 +111,16 @@ function NullPage() {
         useTraditionalChinese={useTraditionalChinese}
       />
 
-      <BookInputSection
+      <AddBook
         onSubmit={handleBookInputSubmit}
         refreshKey={refreshKey}
         useTraditionalChinese={useTraditionalChinese}
         onTraditionalChineseToggle={toggleTraditionalChinese}
       />
 
-      <HelpSection />
-    </NullPageWrapper>
+      <Help />
+    </ContentWrapper>
   );
 }
 
-export default NullPage;
+export default Content;

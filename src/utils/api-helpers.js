@@ -1,4 +1,4 @@
-import { fetchBookDirectory, fetchBookDetail } from '../api';
+import { fetchBookDirectory, fetchBookDetail } from '../services/api';
 
 export async function fetchBookDetailAndDirectory(bookId, { forceRefresh = false, catalogOnly = false } = {}) {
   const refreshDirectory = forceRefresh;

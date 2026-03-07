@@ -106,7 +106,7 @@ const HelpCard = styled.div`
   }
 `;
 
-function HelpSection() {
+function Help() {
   return (
     <Section>
       <SectionTitle><InfoIcon /> 幫助指南</SectionTitle>
@@ -130,4 +130,4 @@ function HelpSection() {
   );
 }
 
-export default HelpSection;
+export default Help;

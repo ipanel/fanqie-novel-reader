@@ -1,7 +1,7 @@
-import { API_BASE_KEY, DIRECTORY_CACHE_KEY, CHAPTER_CACHE_KEY, DETAIL_CACHE_KEY, REQUEST_TIMEOUT_MS } from './utils/constants';
-import { safeGetItem, safeSetItem, setLastReadChapter } from './utils/storage';
-import { createCacheHelpers } from './utils/cache';
-import { maybeConvert } from './utils/zh-convert';
+import { API_BASE_KEY, DIRECTORY_CACHE_KEY, CHAPTER_CACHE_KEY, DETAIL_CACHE_KEY, REQUEST_TIMEOUT_MS } from '../utils/constants';
+import { safeGetItem, safeSetItem, setLastReadChapter } from '../utils/storage';
+import { createCacheHelpers } from '../utils/cache';
+import { maybeConvert } from '../utils/zh-convert';
 
 export const API_OPTIONS = [
   { id: 'bk', url: 'https://bk.yydjtc.cn', label: 'bk.yydjtc.cn' },

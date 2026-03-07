@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useCallback, useReducer, useRef, useEffect } from 'react';
-import { fetchItem } from '../api';
+import { fetchItem } from '../services/api';
 import { MAX_CONCURRENT_DOWNLOADS } from '../utils/constants';
 import { isChapterCached } from '../utils/storage';
 

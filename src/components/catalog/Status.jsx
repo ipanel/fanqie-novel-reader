@@ -12,7 +12,7 @@ const SpinningIcon = styled.span`
   animation: ${spin} 1s linear infinite;
 `;
 
-function ChapterStatusIcon({ isDownloading, isCached }) {
+function Status({ isDownloading, isCached }) {
   if (isDownloading) {
     return (
       <SpinningIcon>
@@ -28,4 +28,4 @@ function ChapterStatusIcon({ isDownloading, isCached }) {
   return <X size={18} color="var(--text-color-secondary)" />;
 }
 
-export default ChapterStatusIcon;
+export default Status;

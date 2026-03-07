@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { fetchBookDetailAndDirectory } from '../utils/api-helpers';
-import { fetchBookDetail } from '../api';
+import { fetchBookDetail } from '../services/api';
 import { normalizeBookInfo } from '../utils/bookInfo';
 import { formatErrorMessage } from '../utils/errors';
 

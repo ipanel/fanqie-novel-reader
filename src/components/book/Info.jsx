@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import AbstractModal from './AbstractModal';
-import { cleanAbstract, truncateText, MAX_ABSTRACT_LENGTH, MOBILE_ABSTRACT_LENGTH } from '../utils/text';
-import { useConvertedText } from '../hooks/useConvertedText';
-import { useMediaQuery } from '../hooks/useMediaQuery';
+import Modal from '../common/Modal';
+import { cleanAbstract, truncateText, MAX_ABSTRACT_LENGTH, MOBILE_ABSTRACT_LENGTH } from '../../utils/text';
+import { useConvertedText } from '../../hooks/useConvertedText';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 
 const InfoWrapper = styled.div`
   display: flex;
@@ -348,7 +348,7 @@ function Info({ bookInfo, useTraditionalChinese = false, variant, footer }) {
         {!isCompact && footer && <Footer>{footer}</Footer>}
       </TextBlock>
       {!isCompact && showFullAbstract && (
-        <AbstractModal text={fullAbstract} onClose={() => setShowFullAbstract(false)} />
+        <Modal text={fullAbstract} onClose={() => setShowFullAbstract(false)} />
       )}
     </InfoWrapper>
   );

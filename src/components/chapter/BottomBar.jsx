@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import styled from 'styled-components';
-import { buildChapterUrl } from '../utils/navigation';
+import { buildChapterUrl } from '../../utils/navigation';
 
 const BottomBarWrapper = styled.div`
   position: fixed;

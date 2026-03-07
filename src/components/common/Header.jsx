@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
-function MyHead({ bookInfo, chapterData }) {
+function Header({ bookInfo, chapterData }) {
   const bookName = bookInfo && bookInfo.book_info && bookInfo.book_info.original_book_name;
   const bookTitle = chapterData && chapterData.novel_data && chapterData.novel_data.original_book_name;
   const author = bookInfo && bookInfo.book_info && bookInfo.book_info.author;
@@ -47,4 +47,4 @@ function MyHead({ bookInfo, chapterData }) {
   );
 }
 
-export default MyHead;
+export default Header;

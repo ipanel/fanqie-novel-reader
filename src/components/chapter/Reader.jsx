@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const MainWrapper = styled.div`
+const ReaderWrapper = styled.div`
   margin: 0 auto;
   padding: 40px 24px 100px 24px;
   padding-top: calc(140px + env(safe-area-inset-top));
@@ -38,7 +38,7 @@ const MainWrapper = styled.div`
   }
 `;
 
-function Main({ chapterData, fontSize = 18, textBrightness = 90 }) {
+function Reader({ chapterData, fontSize = 18, textBrightness = 90 }) {
   if (!chapterData || !chapterData.content) return null;
 
   // Split content by newlines and wrap in <p> tags for better semantics and styling
@@ -48,12 +48,12 @@ function Main({ chapterData, fontSize = 18, textBrightness = 90 }) {
     .filter(p => p.length > 0);
 
   return (
-    <MainWrapper $fontSize={fontSize} $textBrightness={textBrightness}>
+    <ReaderWrapper $fontSize={fontSize} $textBrightness={textBrightness}>
       {paragraphs.map((text, index) => (
         <p key={index}>{text}</p>
       ))}
-    </MainWrapper>
+    </ReaderWrapper>
   );
 }
 
-export default Main;
+export default Reader;

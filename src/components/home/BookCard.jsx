@@ -1,8 +1,8 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import { List, Loader2, MessageCircle, RefreshCw, Trash2 } from 'lucide-react';
-import Info from './Info';
-import { useBookLoader } from '../hooks/useBookLoader';
+import Info from '../book/Info';
+import { useBookLoader } from '../../hooks/useBookLoader';
 
 const spin = keyframes`
   from { transform: rotate(0deg); }
@@ -127,7 +127,7 @@ const ActionButton = styled.button`
   }
 `;
 
-function SavedBookCard({ bookId, actionHint, onClick, onCatalogClick, onCommentClick, onRefreshClick, onDeleteClick, useTraditionalChinese }) {
+function BookCard({ bookId, actionHint, onClick, onCatalogClick, onCommentClick, onRefreshClick, onDeleteClick, useTraditionalChinese }) {
   const { bookInfo, refetch, isRefreshing } = useBookLoader(bookId, { detailOnly: true });
 
   if (!bookInfo) return null;
@@ -190,4 +190,4 @@ function SavedBookCard({ bookId, actionHint, onClick, onCatalogClick, onCommentC
   );
 }
 
-export default SavedBookCard;
+export default BookCard;

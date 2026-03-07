@@ -2,13 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Download, RefreshCw, Minus } from 'lucide-react';
-import { useConvertedText } from '../hooks/useConvertedText';
-import { useDownloadManager } from '../contexts/DownloadManager';
-import { isChapterCached } from '../utils/storage';
-import { IconButton } from './IconButton';
-import { buildChapterUrl } from '../utils/navigation';
-import ChapterStatusIcon from './ChapterStatusIcon';
-import { sortChaptersByNumber } from '../utils/sorting';
+import { useConvertedText } from '../../hooks/useConvertedText';
+import { useDownloadManager } from '../../contexts/DownloadManager';
+import { isChapterCached } from '../../utils/storage';
+import { IconButton } from '../common/IconButton';
+import { buildChapterUrl } from '../../utils/navigation';
+import Status from './Status';
+import { sortChaptersByNumber } from '../../utils/sorting';
 
 const DisabledLinkSpan = styled.span`
   display: block;
@@ -172,7 +172,7 @@ function ChapterActions({ item }) {
   return (
     <div className="chapter-actions">
       <span title={getStatusTitle()} style={{ display: 'flex', color: 'var(--text-color-secondary)' }}>
-        <ChapterStatusIcon isDownloading={downloading} isCached={cached} />
+        <Status isDownloading={downloading} isCached={cached} />
       </span>
       <IconButton
         type="button"

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Search, Globe, Languages } from 'lucide-react';
-import { API_OPTIONS, getApiBase, setApiBase } from '../api';
-import { setUseTraditionalChinese, getUseTraditionalChinese } from '../utils/storage';
+import { API_OPTIONS, getApiBase, setApiBase } from '../../services/api';
+import { useTraditionalChineseToggle } from '../../hooks/useTraditionalChineseToggle';
 
 const Section = styled.section`
   display: flex;
@@ -150,9 +150,9 @@ const TranslateButton = styled.button`
   }
 `;
 
-function BookInputSection({ onSubmit, refreshKey, useTraditionalChinese, onTraditionalChineseToggle }) {
+function AddBook({ onSubmit, refreshKey, useTraditionalChinese, onTraditionalChineseToggle }) {
   const [apiBase, setApiBaseState] = useState(() => getApiBase());
-  const [localUseTraditionalChinese, setLocalUseTraditionalChinese] = useState(getUseTraditionalChinese);
+  const [localUseTraditionalChinese, toggleLocalTraditionalChinese] = useTraditionalChineseToggle();
   const isControlled = useTraditionalChinese !== undefined && onTraditionalChineseToggle !== undefined;
   const effectiveUseTraditionalChinese = isControlled ? useTraditionalChinese : localUseTraditionalChinese;
 
@@ -160,9 +160,7 @@ function BookInputSection({ onSubmit, refreshKey, useTraditionalChinese, onTradi
     if (isControlled) {
       onTraditionalChineseToggle();
     } else {
-      const next = !localUseTraditionalChinese;
-      setUseTraditionalChinese(next);
-      setLocalUseTraditionalChinese(next);
+      toggleLocalTraditionalChinese();
     }
   };
 
@@ -220,4 +218,4 @@ function BookInputSection({ onSubmit, refreshKey, useTraditionalChinese, onTradi
   );
 }
 
-export default BookInputSection;
+export default AddBook;
