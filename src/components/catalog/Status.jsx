@@ -12,20 +12,35 @@ const SpinningIcon = styled.span`
   animation: ${spin} 1s linear infinite;
 `;
 
+const StatusWrapper = styled.span`
+  display: flex;
+  margin-right: 6px;
+`;
+
 function Status({ isDownloading, isCached }) {
   if (isDownloading) {
     return (
-      <SpinningIcon>
-        <Loader2 size={18} />
-      </SpinningIcon>
+      <StatusWrapper>
+        <SpinningIcon>
+          <Loader2 size={18} />
+        </SpinningIcon>
+      </StatusWrapper>
     );
   }
 
   if (isCached) {
-    return <Check size={18} color="var(--accent-color)" />;
+    return (
+      <StatusWrapper>
+        <Check size={18} color="var(--accent-color)" />
+      </StatusWrapper>
+    );
   }
 
-  return <X size={18} color="var(--text-color-secondary)" />;
+  return (
+    <StatusWrapper>
+      <X size={18} color="var(--text-color-secondary)" />
+    </StatusWrapper>
+  );
 }
 
 export default Status;

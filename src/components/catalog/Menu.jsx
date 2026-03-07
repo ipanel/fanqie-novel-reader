@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { Download, RefreshCw, Minus } from 'lucide-react';
+import { Download, RefreshCw, Minus, Trash2 } from 'lucide-react';
 import { useConvertedText } from '../../hooks/useConvertedText';
 import { useDownloadManager } from '../../contexts/DownloadManager';
-import { isChapterCached } from '../../utils/storage';
+import { isChapterCached, deleteChapter } from '../../utils/storage';
 import { IconButton } from '../common/IconButton';
 import { buildChapterUrl } from '../../utils/navigation';
 import { getChapterTitle } from '../../utils/chapter-helpers';
@@ -110,7 +110,7 @@ const MenuItem = styled.li`
   }
 `;
 
-function Menu({ itemDataList, sortOrder, bookId, useTraditionalChinese = false }) {
+function Menu({ itemDataList, sortOrder, bookId, useTraditionalChinese = false, onChapterDeleted }) {
   const { isDownloading } = useDownloadManager();
   const sortedItems = sortChaptersByNumber(itemDataList, sortOrder);
 
@@ -119,7 +119,7 @@ function Menu({ itemDataList, sortOrder, bookId, useTraditionalChinese = false }
       {sortedItems.map((item) => (
         <MenuItem key={item.item_id}>
           <MenuItemLink item={item} bookId={bookId} useTraditionalChinese={useTraditionalChinese} isDownloading={isDownloading(item.item_id)} />
-          <ChapterActions item={item} />
+          <ChapterActions item={item} onChapterDeleted={onChapterDeleted} />
           {item.chapter_word_number != null && <span className="word-count">共計{item.chapter_word_number}字</span>}
         </MenuItem>
       ))}
@@ -141,11 +141,19 @@ function MenuItemLink({ item, bookId, useTraditionalChinese, isDownloading }) {
   return <Link to={buildChapterUrl(item.item_id, bookId)}>{convertedTitle}</Link>;
 }
 
-function ChapterActions({ item }) {
+function ChapterActions({ item, onChapterDeleted }) {
   const { addToQueue, isDownloading } = useDownloadManager();
   const itemId = item.item_id;
-  const cached = isChapterCached(itemId);
+  const [deleted, setDeleted] = useState(false);
   const downloading = isDownloading(itemId);
+  const actualCached = isChapterCached(itemId);
+  const cached = actualCached && !deleted;
+
+  useEffect(() => {
+    if (actualCached && deleted) {
+      setDeleted(false);
+    }
+  }, [actualCached, deleted]);
 
   const getActionIcon = () => {
     if (downloading) return <Minus size={18} style={{ opacity: 0.5 }} />;
@@ -170,6 +178,13 @@ function ChapterActions({ item }) {
     addToQueue(itemId, cached);
   };
 
+  const handleDelete = () => {
+    if (downloading) return;
+    deleteChapter(itemId);
+    setDeleted(true);
+    onChapterDeleted?.();
+  };
+
   return (
     <div className="chapter-actions">
       <span title={getStatusTitle()} style={{ display: 'flex', color: 'var(--text-color-secondary)' }}>
@@ -183,6 +198,11 @@ function ChapterActions({ item }) {
       >
         {getActionIcon()}
       </IconButton>
+      {cached && (
+        <IconButton type="button" title="刪除章節" onClick={handleDelete}>
+          <Trash2 size={18} />
+        </IconButton>
+      )}
     </div>
   );
 }

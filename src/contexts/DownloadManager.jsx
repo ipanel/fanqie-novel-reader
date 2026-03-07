@@ -22,6 +22,7 @@ function reducer(state, action) {
           next.delete(action.itemId);
           return next;
         })(),
+        completedDownloads: new Set([...state.completedDownloads, action.itemId]),
       };
     case 'START_DOWNLOAD_ALL':
       return {
@@ -45,6 +46,7 @@ export function DownloadManagerProvider({ children }) {
     downloading: new Set(),
     downloadAllBookId: null,
     downloadAllItemIds: [],
+    completedDownloads: new Set(),
   });
   const queueRef = useRef([]);
   const activeCountRef = useRef(0);
@@ -125,6 +127,7 @@ export function DownloadManagerProvider({ children }) {
 
   const value = {
     downloading: state.downloading,
+    completedDownloads: state.completedDownloads,
     addToQueue,
     isDownloading,
     startDownloadAll,

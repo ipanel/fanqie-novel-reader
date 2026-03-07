@@ -141,3 +141,8 @@ export function isChapterCached(itemId) {
   return raw != null;
 }
 
+export function deleteChapter(itemId) {
+  if (!itemId) return false;
+  return safeRemoveItem(`${CHAPTER_CACHE_KEY}-${itemId}`);
+}
+

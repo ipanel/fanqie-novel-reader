@@ -36,6 +36,8 @@ function Catalog() {
   const { showToast } = useToast();
   const [sortOrder, setSortOrder] = useState('ascending');
   const [useTraditionalChinese, toggleTraditionalChinese] = useTraditionalChineseToggle();
+  const [, setCatalogRefresh] = useState(0);
+  const onChapterDeleted = () => setCatalogRefresh((k) => k + 1);
 
   const itemDataList = bookInfo?.item_data_list ?? [];
   const uncachedItemIds = itemDataList.filter((item) => !isChapterCached(item.item_id)).map((item) => item.item_id);
@@ -110,7 +112,7 @@ function Catalog() {
         <Content>
           <Info bookInfo={bookInfo} useTraditionalChinese={useTraditionalChinese} />
           {bookInfo.item_data_list && (
-            <Menu sortOrder={sortOrder} itemDataList={bookInfo.item_data_list} bookId={bookId} useTraditionalChinese={useTraditionalChinese} />
+            <Menu sortOrder={sortOrder} itemDataList={bookInfo.item_data_list} bookId={bookId} useTraditionalChinese={useTraditionalChinese} onChapterDeleted={onChapterDeleted} />
           )}
         </Content>
       ) : (
