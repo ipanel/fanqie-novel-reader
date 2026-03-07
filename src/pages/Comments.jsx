@@ -3,6 +3,7 @@ import { useSearchParams, Navigate, useNavigate } from 'react-router-dom';
 import { fetchComments } from '../services/api';
 import { useBookLoader } from '../hooks/useBookLoader';
 import { buildCatalogUrl } from '../utils/navigation';
+import { formatErrorMessage } from '../utils/errors';
 import Error from '../components/common/Error';
 import Loading from '../components/common/Loading';
 import Header from '../components/common/Header';
@@ -35,12 +36,20 @@ function Comments() {
   useEffect(() => {
     if (!bookId) return;
 
+    const controller = new AbortController();
     setLoading(true);
     setCommentsError(null);
-    fetchComments(bookId, { count: COMMENTS_PER_PAGE, offset })
-      .then((res) => setData(res))
-      .catch((err) => setCommentsError(err?.message || 'Failed to fetch comments'))
-      .finally(() => setLoading(false));
+    fetchComments(bookId, { count: COMMENTS_PER_PAGE, offset, signal: controller.signal })
+      .then((res) => {
+        setData(res);
+        setLoading(false);
+      })
+      .catch((err) => {
+        if (err.name === 'AbortError') return;
+        setCommentsError(formatErrorMessage(err, '獲取評論失敗，請稍後再試。'));
+        setLoading(false);
+      });
+    return () => controller.abort();
   }, [bookId, offset, refreshKey]);
 
   const comments = innerData.comment ?? [];

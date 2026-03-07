@@ -20,7 +20,22 @@ export function setApiBase(url) {
 
 async function fetchWithTimeout(url, options = {}, timeoutMs = REQUEST_TIMEOUT_MS) {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  let timedOut = false;
+  const timeoutId = setTimeout(() => {
+    timedOut = true;
+    controller.abort();
+  }, timeoutMs);
+
+  if (options.signal) {
+    if (options.signal.aborted) {
+      clearTimeout(timeoutId);
+      throw new DOMException('The operation was aborted.', 'AbortError');
+    }
+    options.signal.addEventListener('abort', () => {
+      clearTimeout(timeoutId);
+      controller.abort();
+    });
+  }
 
   try {
     const res = await fetch(url, { ...options, signal: controller.signal });
@@ -29,7 +44,10 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = REQUEST_TIMEOUT_M
   } catch (err) {
     clearTimeout(timeoutId);
     if (err.name === 'AbortError') {
-      throw new Error(`Request timed out after ${timeoutMs / 1000}s`);
+      if (timedOut) {
+        throw new Error(`Request timed out after ${timeoutMs / 1000}s`);
+      }
+      throw err;
     }
     throw err;
   }
@@ -58,14 +76,14 @@ const directoryCache = createCacheHelpers(DIRECTORY_CACHE_KEY);
 const chapterCache = createCacheHelpers(CHAPTER_CACHE_KEY);
 const detailCache = createCacheHelpers(DETAIL_CACHE_KEY);
 
-export async function fetchBookDetail(bookId, { forceRefresh = false } = {}) {
+export async function fetchBookDetail(bookId, { forceRefresh = false, signal } = {}) {
   if (!forceRefresh) {
     const cached = detailCache.get(bookId);
     if (cached) return cached;
   }
 
   const url = `${getApiBase()}/api/detail?book_id=${bookId}`;
-  const json = await fetchAndValidate(url);
+  const json = await fetchAndValidate(url, { signal });
   
   const d = json.data?.data ?? {};
   const result = {
@@ -87,7 +105,7 @@ export async function fetchBookDetail(bookId, { forceRefresh = false } = {}) {
   return result;
 }
 
-export async function fetchBookDirectory(bookId, { forceRefresh = false } = {}) {
+export async function fetchBookDirectory(bookId, { forceRefresh = false, signal } = {}) {
   if (!forceRefresh) {
     const cached = directoryCache.get(bookId);
     if (cached) {
@@ -97,7 +115,7 @@ export async function fetchBookDirectory(bookId, { forceRefresh = false } = {}) 
   }
 
   const url = `${getApiBase()}/api/directory?book_id=${bookId}`;
-  const options = forceRefresh ? { cache: 'no-store' } : {};
+  const options = { ...(forceRefresh && { cache: 'no-store' }), ...(signal && { signal }) };
   const json = await fetchAndValidate(url, options);
   
   const { lists } = json.data || {};
@@ -133,7 +151,7 @@ async function applyChapterConversion(result) {
   };
 }
 
-export async function fetchItem(itemId, { forceRefresh = false } = {}) {
+export async function fetchItem(itemId, { forceRefresh = false, signal } = {}) {
   if (!forceRefresh) {
     const cached = chapterCache.get(itemId);
     if (cached != null) {
@@ -143,7 +161,7 @@ export async function fetchItem(itemId, { forceRefresh = false } = {}) {
   }
 
   const url = `${getApiBase()}/api/content?tab=小说&item_id=${itemId}`;
-  const json = await fetchAndValidate(url);
+  const json = await fetchAndValidate(url, { signal });
   
   const content = json.data?.content ?? '';
   const filteredContent = stripHtmlTagsAndNewlines(content);
@@ -161,8 +179,8 @@ export async function fetchItem(itemId, { forceRefresh = false } = {}) {
   return applyChapterConversion(result);
 }
 
-export async function fetchComments(bookId, { count = 20, offset = 1 } = {}) {
+export async function fetchComments(bookId, { count = 20, offset = 1, signal } = {}) {
   const url = `${getApiBase()}/api/comment?book_id=${bookId}&count=${count}&offset=${offset}`;
-  const json = await fetchAndValidate(url);
+  const json = await fetchAndValidate(url, { signal });
   return json.data ?? { data: { comment: [], comment_cnt: 0, context: '', has_more: false } };
 }

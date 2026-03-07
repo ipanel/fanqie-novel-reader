@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { fetchItem } from '../services/api';
 import { fetchBookDetailAndDirectory } from '../utils/api-helpers';
 import { buildNovelDataFromDirectory } from '../utils/chapter-helpers';
@@ -10,17 +10,25 @@ export function useChapterLoader(itemId, bookId) {
   const [chapterData, setChapterData] = useState(null);
   const [bookInfo, setBookInfo] = useState(null);
   const [loading, setLoading] = useState(true);
+  const userFetchAbortRef = useRef(null);
 
-  const loadChapter = useCallback((forceRefresh = false) => {
+  const loadChapter = useCallback((forceRefresh = false, signal) => {
     if (!itemId) return;
-    
+
+    const effectiveSignal = signal ?? (() => {
+      userFetchAbortRef.current?.abort();
+      const controller = new AbortController();
+      userFetchAbortRef.current = controller;
+      return controller.signal;
+    })();
+
     setLoading(true);
     setError(null);
 
     const loadPromise = bookId
       ? Promise.all([
-          fetchItem(itemId, { forceRefresh }),
-          fetchBookDetailAndDirectory(bookId, { forceRefresh: false }),
+          fetchItem(itemId, { forceRefresh, signal: effectiveSignal }),
+          fetchBookDetailAndDirectory(bookId, { forceRefresh: false, signal: effectiveSignal }),
         ]).then(([contentRes, mergedBookInfo]) => {
           const contentData = contentRes.data.data;
           const novelData = buildNovelDataFromDirectory(itemId, bookId, mergedBookInfo.item_data_list);
@@ -29,7 +37,7 @@ export function useChapterLoader(itemId, bookId) {
             bookInfo: mergedBookInfo,
           };
         })
-      : fetchItem(itemId, { forceRefresh }).then((response) => ({
+      : fetchItem(itemId, { forceRefresh, signal: effectiveSignal }).then((response) => ({
           chapterData: response.data.data,
           bookInfo: null,
         }));
@@ -41,20 +49,27 @@ export function useChapterLoader(itemId, bookId) {
         if (bookId && itemId) {
           setLastReadChapter(bookId, itemId);
         }
+        setLoading(false);
       })
       .catch((err) => {
+        if (err.name === 'AbortError') return;
         console.error('獲取章節內容失敗:', err);
-        const msg = formatErrorMessage(
-          err,
-          '獲取章節內容失敗，來到沒有內容的荒原，請返回目錄重試！'
+        setError(
+          formatErrorMessage(err, '獲取章節內容失敗，來到沒有內容的荒原，請返回目錄重試！')
         );
-        setError(msg);
-      })
-      .finally(() => setLoading(false));
+        setLoading(false);
+      });
   }, [itemId, bookId]);
 
   useEffect(() => {
-    if (itemId) loadChapter(false);
+    return () => userFetchAbortRef.current?.abort();
+  }, []);
+
+  useEffect(() => {
+    if (!itemId) return;
+    const controller = new AbortController();
+    loadChapter(false, controller.signal);
+    return () => controller.abort();
   }, [itemId, loadChapter]);
 
   return {
