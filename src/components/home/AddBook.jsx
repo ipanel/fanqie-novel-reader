@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Search, Globe, Languages } from 'lucide-react';
 import { API_OPTIONS, getApiBase, setApiBase } from '../../services/api';
 import { useTraditionalChineseToggle } from '../../hooks/useTraditionalChineseToggle';
+import { parseBookIdFromInput } from '../../utils/parseBookId';
 
 const Section = styled.section`
   display: flex;
@@ -173,10 +174,10 @@ function AddBook({ onSubmit, refreshKey, useTraditionalChinese, onTraditionalChi
   const handleSubmit = (e) => {
     e.preventDefault();
     const inputElement = document.getElementById('bookIdInput');
-    const bookId = inputElement.value?.trim();
-    if (bookId && onSubmit) {
-      onSubmit(bookId);
-    }
+    const raw = inputElement.value?.trim();
+    if (!raw || !onSubmit) return;
+    const bookId = parseBookIdFromInput(raw) ?? raw;
+    onSubmit(bookId);
   };
 
   return (

@@ -6,6 +6,7 @@ import Error from '../components/common/Error';
 import Header from '../components/common/Header';
 import Loading from '../components/common/Loading';
 import PageWrapper from '../components/common/PageWrapper';
+import { useToast } from '../contexts/ToastContext';
 import TopBar from '../components/catalog/TopBar';
 import styled from 'styled-components';
 import { getLastReadChapter, isChapterCached } from '../utils/storage';
@@ -32,6 +33,7 @@ function Catalog() {
   
   const { error, bookInfo, loadBook } = useBookLoader(bookId);
   const { addToQueue, isDownloading, startDownloadAll, stopDownloadAll, isDownloadingAll } = useDownloadManager();
+  const { showToast } = useToast();
   const [sortOrder, setSortOrder] = useState('ascending');
   const [useTraditionalChinese, toggleTraditionalChinese] = useTraditionalChineseToggle();
 
@@ -62,12 +64,15 @@ function Catalog() {
   const handleExportTxt = () => {
     const list = bookInfo?.item_data_list ?? [];
     const sorted = sortChaptersByNumber(list, sortOrder);
-    exportBookToTxt({
+    const result = exportBookToTxt({
       bookId,
       bookInfo,
       itemDataList: sorted,
       useTraditionalChinese,
     });
+    if (result?.exportedCount === 0) {
+      showToast('沒有已下載的章節，無法匯出正文。請先下載章節。');
+    }
   };
 
   if (!bookId) {

@@ -12,9 +12,10 @@ const chapterCache = createCacheHelpers(CHAPTER_CACHE_KEY);
  * @param {Object} params.bookInfo - Book info (book_info.original_book_name, author, abstract)
  * @param {Array<{item_id: string, title: string}>} params.itemDataList - Chapter list
  * @param {boolean} [params.useTraditionalChinese] - Whether to convert content to traditional Chinese
+ * @returns {{ exportedCount: number }} Number of chapters exported; 0 if none were cached
  */
 export function exportBookToTxt({ bookId, bookInfo, itemDataList, useTraditionalChinese = false }) {
-  if (!bookId || !bookInfo || !itemDataList?.length) return;
+  if (!bookId || !bookInfo || !itemDataList?.length) return { exportedCount: 0 };
 
   const bookInfoData = bookInfo?.book_info || bookInfo;
   const bookName = maybeConvert(bookInfoData.original_book_name, useTraditionalChinese);
@@ -34,6 +35,7 @@ export function exportBookToTxt({ bookId, bookInfo, itemDataList, useTraditional
     '',
   ];
 
+  let exportedCount = 0;
   for (const item of itemDataList) {
     const content = chapterCache.get(item.item_id);
     if (content == null || typeof content !== 'string') continue;
@@ -45,7 +47,10 @@ export function exportBookToTxt({ bookId, bookInfo, itemDataList, useTraditional
     lines.push('');
     lines.push(converted.trim());
     lines.push('');
+    exportedCount += 1;
   }
+
+  if (exportedCount === 0) return { exportedCount: 0 };
 
   const text = lines.join('\n');
   const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
@@ -56,4 +61,5 @@ export function exportBookToTxt({ bookId, bookInfo, itemDataList, useTraditional
   a.download = `${safeName}.txt`;
   a.click();
   URL.revokeObjectURL(url);
+  return { exportedCount };
 }

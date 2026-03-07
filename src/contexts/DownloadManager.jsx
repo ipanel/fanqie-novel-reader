@@ -2,6 +2,8 @@ import React, { createContext, useContext, useCallback, useReducer, useRef, useE
 import { fetchItem } from '../services/api';
 import { MAX_CONCURRENT_DOWNLOADS } from '../utils/constants';
 import { isChapterCached } from '../utils/storage';
+import { formatErrorMessage } from '../utils/errors';
+import { useToast } from './ToastContext';
 
 const DownloadManagerContext = createContext(null);
 
@@ -46,6 +48,7 @@ export function DownloadManagerProvider({ children }) {
   });
   const queueRef = useRef([]);
   const activeCountRef = useRef(0);
+  const { showToast } = useToast();
 
   const processQueue = useCallback(() => {
     const queue = queueRef.current;
@@ -58,14 +61,18 @@ export function DownloadManagerProvider({ children }) {
       dispatch({ type: 'START', itemId });
       fetchItem(itemId, { forceRefresh })
         .then(() => {})
-        .catch((err) => console.error('Chapter download failed:', itemId, err))
+        .catch(() => fetchItem(itemId, { forceRefresh }))
+        .catch((err) => {
+          showToast(formatErrorMessage(err, '章節下載失敗，請稍後再試。'), 3500);
+          console.error('Chapter download failed:', itemId, err);
+        })
         .finally(() => {
           activeCountRef.current -= 1;
           dispatch({ type: 'END', itemId });
           processQueue();
         });
     }
-  }, [state.downloading]);
+  }, [state.downloading, showToast]);
 
   const addToQueue = useCallback((itemId, forceRefresh = false) => {
     if (!itemId) return;

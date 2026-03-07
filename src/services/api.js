@@ -56,7 +56,12 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = REQUEST_TIMEOUT_M
 async function fetchAndValidate(url, options = {}) {
   const res = await fetchWithTimeout(url, options);
   if (!res.ok) throw new Error('Failed to fetch data');
-  const json = await res.json();
+  let json;
+  try {
+    json = await res.json();
+  } catch (parseErr) {
+    throw new Error('Invalid response from server');
+  }
   if (json.code !== 200) throw new Error('Failed to fetch data');
   return json;
 }
