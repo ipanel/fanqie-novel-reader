@@ -31,26 +31,26 @@ function TopBar({
 }) {
   return (
     <TopBarBase>
-      <HomeButton />
+      <HomeButton title="返回首頁" />
       {totalPages > 1 && (
-        <>
-          <IconButton
-            type="button"
-            title={`上一頁 (${currentPage + 1}/${totalPages})`}
-            onClick={onPagePrev}
-            disabled={!canGoPrev}
-          >
-            <ChevronLeft size={20} strokeWidth={2.5} />
-          </IconButton>
-          <IconButton
-            type="button"
-            title={`下一頁 (${currentPage + 1}/${totalPages})`}
-            onClick={onPageNext}
-            disabled={!canGoNext}
-          >
-            <ChevronRight size={20} strokeWidth={2.5} />
-          </IconButton>
-        </>
+        <IconButton
+          type="button"
+          title={`上一頁 (${currentPage + 1}/${totalPages})`}
+          onClick={onPagePrev}
+          disabled={!canGoPrev}
+        >
+          <ChevronLeft size={20} strokeWidth={2.5} />
+        </IconButton>
+      )}
+      {totalPages > 1 && (
+        <IconButton
+          type="button"
+          title={`下一頁 (${currentPage + 1}/${totalPages})`}
+          onClick={onPageNext}
+          disabled={!canGoNext}
+        >
+          <ChevronRight size={20} strokeWidth={2.5} />
+        </IconButton>
       )}
       <IconButton
         type="button"

@@ -13,9 +13,11 @@ export const IconLink = styled(Link)`
   border-radius: 12px;
   transition: all 0.2s ease;
 
-  &:hover {
-    background-color: var(--hover-background-color);
-    color: var(--accent-color);
+  @media (hover: hover) {
+    &:hover {
+      background-color: var(--hover-background-color);
+      color: var(--accent-color);
+    }
   }
 
   @media (max-width: 480px) {
@@ -39,9 +41,11 @@ export const IconButton = styled.button`
   cursor: pointer;
   transition: all 0.2s ease;
 
-  &:hover:not(:disabled) {
-    background-color: var(--hover-background-color);
-    color: var(--accent-color);
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      background-color: var(--hover-background-color);
+      color: var(--accent-color);
+    }
   }
 
   &:disabled {

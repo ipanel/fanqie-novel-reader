@@ -8,7 +8,7 @@ import { buildCatalogUrl } from '../../utils/navigation';
 function TopBar({ bookId, navigate, useTraditionalChinese, toggleTraditionalChinese, onRefresh }) {
   return (
     <TopBarBase>
-      <HomeButton />
+      <HomeButton title="返回首頁" />
       <IconButton
         type="button"
         title={useTraditionalChinese ? '切換為簡體中文' : '切換為繁體中文'}

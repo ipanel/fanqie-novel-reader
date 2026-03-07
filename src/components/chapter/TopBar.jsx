@@ -124,26 +124,26 @@ function TopBar({ chapterData, bookInfo, fontSize, onFontSizeChange, textBrightn
           {bookInfo && <h3>{convertedBookName}</h3>}
         </TitleBlock>
         <ActionBar panelTitle="工具">
-            <HomeButton />
+            <HomeButton title="返回首頁" />
             {onFontSizeChange && (
-              <>
-                <IconButton
-                  type="button"
-                  title="減小字號"
-                  disabled={fontSize <= FONT_SIZE_MIN}
-                  onClick={() => onFontSizeChange(-1)}
-                >
-                  <Minus size={20} strokeWidth={2.5} />
-                </IconButton>
-                <IconButton
-                  type="button"
-                  title="增大字號"
-                  disabled={fontSize >= FONT_SIZE_MAX}
-                  onClick={() => onFontSizeChange(1)}
-                >
-                  <Plus size={20} strokeWidth={2.5} />
-                </IconButton>
-              </>
+              <IconButton
+                type="button"
+                title="減小字號"
+                disabled={fontSize <= FONT_SIZE_MIN}
+                onClick={() => onFontSizeChange(-1)}
+              >
+                <Minus size={20} strokeWidth={2.5} />
+              </IconButton>
+            )}
+            {onFontSizeChange && (
+              <IconButton
+                type="button"
+                title="增大字號"
+                disabled={fontSize >= FONT_SIZE_MAX}
+                onClick={() => onFontSizeChange(1)}
+              >
+                <Plus size={20} strokeWidth={2.5} />
+              </IconButton>
             )}
             {onTraditionalChineseToggle && (
               <IconButton
@@ -156,24 +156,24 @@ function TopBar({ chapterData, bookInfo, fontSize, onFontSizeChange, textBrightn
               </IconButton>
             )}
             {onTextBrightnessChange && (
-              <>
-                <IconButton
-                  type="button"
-                  title="變暗"
-                  disabled={textBrightness <= TEXT_BRIGHTNESS_MIN}
-                  onClick={() => onTextBrightnessChange(-1)}
-                >
-                  <Moon size={20} strokeWidth={2.5} />
-                </IconButton>
-                <IconButton
-                  type="button"
-                  title="變亮"
-                  disabled={textBrightness >= TEXT_BRIGHTNESS_MAX}
-                  onClick={() => onTextBrightnessChange(1)}
-                >
-                  <Sun size={20} strokeWidth={2.5} />
-                </IconButton>
-              </>
+              <IconButton
+                type="button"
+                title="變暗"
+                disabled={textBrightness <= TEXT_BRIGHTNESS_MIN}
+                onClick={() => onTextBrightnessChange(-1)}
+              >
+                <Moon size={20} strokeWidth={2.5} />
+              </IconButton>
+            )}
+            {onTextBrightnessChange && (
+              <IconButton
+                type="button"
+                title="變亮"
+                disabled={textBrightness >= TEXT_BRIGHTNESS_MAX}
+                onClick={() => onTextBrightnessChange(1)}
+              >
+                <Sun size={20} strokeWidth={2.5} />
+              </IconButton>
             )}
             {onRefresh && (
               <IconButton type="button" title="重新載入章節" onClick={onRefresh}>

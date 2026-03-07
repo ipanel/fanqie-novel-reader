@@ -4,6 +4,20 @@ import { IconButton } from './IconButton';
 import styled from 'styled-components';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 
+const ToolItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+`;
+
+const ToolLabel = styled.span`
+  font-size: 11px;
+  color: var(--text-color-secondary);
+  text-align: center;
+  line-height: 1.2;
+`;
+
 const RightActions = styled.div`
   display: flex;
   align-items: center;
@@ -29,9 +43,11 @@ const ToolsToggle = styled.button`
   cursor: pointer;
   transition: all 0.2s ease;
 
-  &:hover {
-    background-color: var(--hover-background-color);
-    color: var(--accent-color);
+  @media (hover: hover) {
+    &:hover {
+      background-color: var(--hover-background-color);
+      color: var(--accent-color);
+    }
   }
 
   @media (max-width: 480px) {
@@ -134,7 +150,18 @@ function ActionBar({ children, panelTitle = '工具' }) {
                 <X size={20} strokeWidth={2.5} />
               </IconButton>
             </ToolsPanelHeader>
-            <ToolsPanelContent onClick={() => setToolsExpanded(false)}>{children}</ToolsPanelContent>
+            <ToolsPanelContent>
+              {React.Children.map(children, (child, index) => {
+                if (!child) return null;
+                const title = child.props?.title;
+                return (
+                  <ToolItem key={child.key ?? index}>
+                    {child}
+                    {title && <ToolLabel>{title}</ToolLabel>}
+                  </ToolItem>
+                );
+              })}
+            </ToolsPanelContent>
           </ToolsPanel>
         </>
       )}

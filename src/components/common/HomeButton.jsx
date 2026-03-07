@@ -1,9 +1,9 @@
 import { LayoutDashboard } from 'lucide-react';
 import { IconLink } from './IconButton';
 
-function HomeButton() {
+function HomeButton({ title = '返回首頁' }) {
   return (
-    <IconLink to="/" title="返回首頁">
+    <IconLink to="/" title={title}>
       <LayoutDashboard size={20} strokeWidth={2.5} />
     </IconLink>
   );
