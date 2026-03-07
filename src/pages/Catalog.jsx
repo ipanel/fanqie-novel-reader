@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { useSearchParams, Navigate, useNavigate, Link } from 'react-router-dom';
-import { Bookmark, CloudDownload, Download, Languages, MessageCircle, RefreshCw } from 'lucide-react';
+import { ArrowUpDown, Bookmark, CloudDownload, Download, Languages, MessageCircle, RefreshCw } from 'lucide-react';
 import Menu from '../components/Menu';
 import Info from '../components/Info';
 import Error from '../components/Error';
 import MyHead from '../components/MyHead';
-import Sort from '../components/Sort';
 import LoadingPage from '../components/LoadingPage';
 import HomeButton from '../components/HomeButton';
 import { IconButton } from '../components/IconButton';
@@ -126,6 +125,14 @@ function Catalog() {
           <HomeButton />
           <IconButton
             type="button"
+            title={sortOrder === 'ascending' ? '升序排列 (點擊切換為降序)' : '降序排列 (點擊切換為升序)'}
+            onClick={handleSortChange}
+            style={sortOrder === 'descending' ? { color: 'var(--accent-color)' } : undefined}
+          >
+            <ArrowUpDown size={20} strokeWidth={2.5} />
+          </IconButton>
+          <IconButton
+            type="button"
             title={useTraditionalChinese ? '切換為簡體中文' : '切換為繁體中文'}
             onClick={toggleTraditionalChinese}
             style={useTraditionalChinese ? { color: 'var(--accent-color)' } : undefined}
@@ -180,10 +187,7 @@ function Catalog() {
         <CatalogContent>
           <Info bookInfo={bookInfo} useTraditionalChinese={useTraditionalChinese} />
           {bookInfo.item_data_list && (
-            <>
-              <Sort sortOrder={sortOrder} onSortChange={handleSortChange} />
-              <Menu sortOrder={sortOrder} itemDataList={bookInfo.item_data_list} bookId={bookId} useTraditionalChinese={useTraditionalChinese} />
-            </>
+            <Menu sortOrder={sortOrder} itemDataList={bookInfo.item_data_list} bookId={bookId} useTraditionalChinese={useTraditionalChinese} />
           )}
         </CatalogContent>
       ) : (
