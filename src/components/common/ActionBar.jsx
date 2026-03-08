@@ -93,7 +93,7 @@ const ToolsPanel = styled.div`
     box-shadow: -8px 0 24px rgba(0, 0, 0, 0.4);
     transform: translateX(${(p) => (p.$open ? '0' : '100%')});
     transition: transform 0.25s ease-out;
-    overflow: hidden;
+    overflow: visible;
   }
 `;
 
