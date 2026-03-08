@@ -9,10 +9,10 @@ For foreign readers, use Google Translate or AI translation plugins in your brow
 ## Preview
 
 <p align="center">
-  <img src="https://i.imgur.com/OwM0o2um.png" width="24%" alt="預覽 1">
-  <img src="https://i.imgur.com/iUC48s8m.png" width="24%" alt="預覽 2">
-  <img src="https://i.imgur.com/JjPwI30m.png" width="24%" alt="預覽 3">
-  <img src="https://i.imgur.com/gam1lGpm.png" width="24%" alt="預覽 4">
+  <img src="https://i.imgur.com/OwM0o2ul.png" width="24%" alt="預覽 1">
+  <img src="https://i.imgur.com/iUC48s8l.png" width="24%" alt="預覽 2">
+  <img src="https://i.imgur.com/JjPwI30l.png" width="24%" alt="預覽 3">
+  <img src="https://i.imgur.com/gam1lGpl.png" width="24%" alt="預覽 4">
 </p>
 
 ## Features
