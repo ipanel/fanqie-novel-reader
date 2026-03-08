@@ -123,7 +123,7 @@ function Catalog() {
           downloadingAll={downloadingAll}
           onBatchDownload={handleBatchDownload}
           onDownloadAll={handleDownloadAll}
-          onReload={() => loadBook(true)}
+          onRefresh={() => loadBook(true)}
           onExportTxt={handleExportTxt}
           lastReadItemId={lastReadItemId}
           currentPage={currentPage}

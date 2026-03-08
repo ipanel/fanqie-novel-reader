@@ -8,11 +8,12 @@ export const FONT_FAMILY_KEY = 'fanqie-fontFamily';
 export const TRADITIONAL_CHINESE_KEY = 'fanqie-traditionalChinese';
 export const TEXT_BRIGHTNESS_KEY = 'fanqie-textBrightness';
 
+/** API sources: { value: base URL, label: display name } */
 export const API_OPTIONS = [
-  { id: 'bk', url: 'https://bk.yydjtc.cn', label: 'bk.yydjtc.cn' },
-  { id: 'qkfq', url: 'https://qkfqapi.vv9v.cn', label: 'qkfqapi.vv9v.cn' },
-  { id: '103', url: 'http://103.236.91.147:9999', label: '103.236.91.147:9999' },
-  { id: '101', url: 'http://101.35.133.34:5000', label: '101.35.133.34:5000' },
+  { value: 'https://bk.yydjtc.cn', label: 'bk.yydjtc.cn' },
+  { value: 'https://qkfqapi.vv9v.cn', label: 'qkfqapi.vv9v.cn' },
+  { value: 'http://103.236.91.147:9999', label: '103.236.91.147:9999' },
+  { value: 'http://101.35.133.34:5000', label: '101.35.133.34:5000' },
 ];
 
 /** Chinese fonts for reader: { value: CSS font-family, label: display name } */

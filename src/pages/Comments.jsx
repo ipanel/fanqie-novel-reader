@@ -96,7 +96,6 @@ function Comments() {
         <>
           <TopBar
             bookId={bookId}
-            navigate={navigate}
             useTraditionalChinese={useTraditionalChinese}
             toggleTraditionalChinese={toggleTraditionalChinese}
             onRefresh={handleRefresh}

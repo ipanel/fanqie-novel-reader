@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ArrowUpDown, Bookmark, ChevronLeft, ChevronRight, CloudDownload, Download, FileText, Globe, Languages, MessageCircle, RefreshCw } from 'lucide-react';
 import TopBarBase from '../common/TopBarBase';
 import HomeButton from '../common/HomeButton';
 import { IconButton } from '../common/IconButton';
 import IconDropdown from '../common/IconDropdown';
+import { useApiBase } from '../../hooks/useApiBase';
 import { buildChapterUrl, buildCommentsUrl } from '../../utils/navigation';
 import { API_OPTIONS } from '../../utils/constants';
-import { getApiBase, setApiBase } from '../../services/api';
-
-const apiOptions = API_OPTIONS.map((o) => ({ value: o.url, label: o.label }));
+import { getTraditionalChineseToggleTitle } from '../../utils/zh-convert';
 
 function TopBar({
   bookId,
@@ -24,7 +23,7 @@ function TopBar({
   downloadingAll,
   onBatchDownload,
   onDownloadAll,
-  onReload,
+  onRefresh,
   onExportTxt,
   lastReadItemId,
   currentPage = 0,
@@ -34,7 +33,7 @@ function TopBar({
   onPagePrev = () => {},
   onPageNext = () => {},
 }) {
-  const [apiBase, setApiBaseState] = useState(getApiBase);
+  const [apiBase, handleApiChange] = useApiBase();
   return (
     <TopBarBase>
       <HomeButton title="返回首頁" />
@@ -42,12 +41,9 @@ function TopBar({
         icon={<Globe size={20} strokeWidth={2.5} />}
         title="API 來源"
         ariaLabel="選擇 API 來源"
-        options={apiOptions}
+        options={API_OPTIONS}
         value={apiBase}
-        onChange={(url) => {
-          setApiBase(url);
-          setApiBaseState(url);
-        }}
+        onChange={handleApiChange}
       />
       {totalPages > 1 && (
         <IconButton
@@ -79,7 +75,7 @@ function TopBar({
       </IconButton>
       <IconButton
         type="button"
-        title={useTraditionalChinese ? '切換為簡體中文' : '切換為繁體中文'}
+        title={getTraditionalChineseToggleTitle(useTraditionalChinese)}
         onClick={toggleTraditionalChinese}
         style={useTraditionalChinese ? { color: 'var(--accent-color)' } : undefined}
       >
@@ -119,7 +115,7 @@ function TopBar({
       <IconButton
         type="button"
         title="重新載入目錄"
-        onClick={onReload}
+        onClick={onRefresh}
       >
         <RefreshCw size={20} strokeWidth={2.5} />
       </IconButton>
@@ -129,7 +125,7 @@ function TopBar({
           onClick={() => navigate(buildChapterUrl(lastReadItemId, bookId))}
           title="返回章節"
         >
-          <Bookmark size={20} strokeWidth={2} />
+          <Bookmark size={20} strokeWidth={2.5} />
         </IconButton>
       )}
     </TopBarBase>

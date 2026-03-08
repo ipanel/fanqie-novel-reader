@@ -93,7 +93,7 @@ function IconDropdown({ icon, title, ariaLabel, options, value, onChange }) {
               role="option"
               aria-selected={value === opt.value}
               $active={value === opt.value}
-              $fontFamily={opt.fontFamily}
+              $fontFamily={opt.fontFamily ?? opt.value}
               onClick={() => {
                 onChange(opt.value);
                 setOpen(false);

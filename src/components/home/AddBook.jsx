@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Search, Globe, Languages } from 'lucide-react';
 import { API_OPTIONS } from '../../utils/constants';
-import { getApiBase, setApiBase } from '../../services/api';
+import { getTraditionalChineseToggleTitle } from '../../utils/zh-convert';
+import { useApiBase } from '../../hooks/useApiBase';
 import { useTraditionalChineseToggle } from '../../hooks/useTraditionalChineseToggle';
 import { parseBookIdFromInput } from '../../utils/parseBookId';
 
@@ -153,7 +154,7 @@ const TranslateButton = styled.button`
 `;
 
 function AddBook({ onSubmit, refreshKey, useTraditionalChinese, onTraditionalChineseToggle }) {
-  const [apiBase, setApiBaseState] = useState(() => getApiBase());
+  const [apiBase, handleApiChange] = useApiBase();
   const [localUseTraditionalChinese, toggleLocalTraditionalChinese] = useTraditionalChineseToggle();
   const isControlled = useTraditionalChinese !== undefined && onTraditionalChineseToggle !== undefined;
   const effectiveUseTraditionalChinese = isControlled ? useTraditionalChinese : localUseTraditionalChinese;
@@ -166,10 +167,8 @@ function AddBook({ onSubmit, refreshKey, useTraditionalChinese, onTraditionalChi
     }
   };
 
-  const handleApiChange = (e) => {
-    const url = e.target.value;
-    setApiBase(url);
-    setApiBaseState(url);
+  const handleSelectChange = (e) => {
+    handleApiChange(e.target.value);
   };
 
   const handleSubmit = (e) => {
@@ -198,9 +197,9 @@ function AddBook({ onSubmit, refreshKey, useTraditionalChinese, onTraditionalChi
         <ApiSelectWrapper>
           <Globe size={14} />
           <span>API 服務:</span>
-          <select id="apiSelect" value={apiBase} onChange={handleApiChange}>
+          <select id="apiSelect" value={apiBase} onChange={handleSelectChange}>
             {API_OPTIONS.map((opt) => (
-              <option key={opt.id} value={opt.url}>
+              <option key={opt.value} value={opt.value}>
                 {opt.label}
               </option>
             ))}
@@ -209,7 +208,7 @@ function AddBook({ onSubmit, refreshKey, useTraditionalChinese, onTraditionalChi
             type="button"
             $active={effectiveUseTraditionalChinese}
             onClick={handleTranslateToggle}
-            title={effectiveUseTraditionalChinese ? '切換為簡體中文' : '切換為繁體中文'}
+            title={getTraditionalChineseToggleTitle(effectiveUseTraditionalChinese)}
           >
             <Languages size={16} strokeWidth={2.5} />
             {effectiveUseTraditionalChinese ? '繁體' : '简体'}

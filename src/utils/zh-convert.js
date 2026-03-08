@@ -8,3 +8,7 @@ export function maybeConvert(text, useTraditional) {
   if (!shouldConvert || !text || typeof text !== 'string') return text;
   return converter(text);
 }
+
+export function getTraditionalChineseToggleTitle(useTraditionalChinese) {
+  return useTraditionalChinese ? '切換為簡體中文' : '切換為繁體中文';
+}

@@ -3,7 +3,7 @@ import { safeGetItem, safeSetItem, setLastReadChapter } from '../utils/storage';
 import { createCacheHelpers } from '../utils/cache';
 import { maybeConvert } from '../utils/zh-convert';
 
-const DEFAULT_API_BASE = API_OPTIONS[0].url;
+const DEFAULT_API_BASE = API_OPTIONS[0].value;
 
 export function getApiBase() {
   return safeGetItem(API_BASE_KEY) || DEFAULT_API_BASE;
