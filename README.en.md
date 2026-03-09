@@ -1,21 +1,39 @@
 # Fanqie Novel Reader
 
-[繁體中文](README.md) | English
-
-A simple, ad-free Fanqie novel reader. No installation or registration needed. Supports multi-chapter downloads and TXT export without a Chinese phone number.
-
-For foreign readers, use Google Translate or AI translation plugins in your browser to translate this site.
-
-## Preview
-
 <p align="center">
-  <img src="https://i.imgur.com/OwM0o2ul.png" width="24%" alt="預覽 1">
-  <img src="https://i.imgur.com/iUC48s8l.png" width="24%" alt="預覽 2">
-  <img src="https://i.imgur.com/JjPwI30l.png" width="24%" alt="預覽 3">
-  <img src="https://i.imgur.com/gam1lGpl.png" width="24%" alt="預覽 4">
+  <img src="https://img.shields.io/github/stars/denniemok/fanqie-novel-reader?style=for-the-badge&color=yellow" alt="Stars">
+  <img src="https://img.shields.io/github/v/release/denniemok/fanqie-novel-reader?style=for-the-badge&color=blue" alt="Release">
+  <img src="https://img.shields.io/github/license/denniemok/fanqie-novel-reader?style=for-the-badge&color=green" alt="License">
+  <img src="https://img.shields.io/badge/demo-fqnr.pages.dev-orange.svg?style=for-the-badge" alt="Demo">
 </p>
 
-## Features
+**[中文](README.md) | English**
+
+An ad-free Fanqie Novel online reader with no registration or Chinese phone number required. Supports multi-chapter download, offline reading, and TXT export across mobile and desktop devices.
+
+> [!NOTE]
+> This site does not have MTL yet. Use Google Translate or AI translation plugins in your browser as an alternative. **We plan to add MTL in the future — stay tuned!**
+
+<details>
+<summary><b>TomatoMTL vs FQNR</b></summary>
+
+While TomatoMTL is powerful, it requires login and contains ads. FQNR is a lightweight, ad-free alternative that doesn't require registration. It focuses on providing fast access to raw text directly from Fanqie Novel. Though you will need to find your own ways to do the translations at the moment.
+</details>
+
+
+## 🚀 Quick Start
+
+👉 Try it here: <https://fqnr.pages.dev>
+
+<p align="center">
+  <img src="https://i.imgur.com/OwM0o2ul.png" width="24%" alt="Preview 1">
+  <img src="https://i.imgur.com/iUC48s8l.png" width="24%" alt="Preview 2">
+  <img src="https://i.imgur.com/JjPwI30l.png" width="24%" alt="Preview 3">
+  <img src="https://i.imgur.com/gam1lGpl.png" width="24%" alt="Preview 4">
+</p>
+
+
+## ✨ Features
 
 - **Ad-Free**: No ads, just reading.
 - **No Install**: Runs entirely in your browser.
@@ -28,40 +46,43 @@ For foreign readers, use Google Translate or AI translation plugins in your brow
 - **TXT Export**: Save your downloaded chapters as TXT files.
 - **Stay Updated**: See ratings, comments, and the latest updates.
 
-## Quick Start
 
-Try it here: <https://fqnr.pages.dev>
+## 🧩 Usage
 
-### Development
+1. Visit [Fanqie Novel](https://fanqienovel.com) and find a book of your interest.
+2. Copy the numeric ID from the URL, for example:
+   ```
+   https://fanqienovel.com/page/123456789?...
+   ```
+   The Book ID is `123456789`.
+
+3. Paste the Book ID or full URL into the textbox on the homepage.
+4. Click "Start Reading".
+5. Your reading history appears on the homepage, so you can continue where you left off.
+
+
+## 🛠️ Development
 
 ```bash
 npm install
 npm run dev
 ```
 
-Visit `http://localhost:5173`. The app calls the Fanqie API directly — no backend needed.
+- Visit `http://localhost:5173`.
+- The app calls the Fanqie API directly — no backend needed.
 
-### Deployment
+
+## 📦 Deployment
 
 ```bash
 npm run build
 ```
 
-Static files are in `dist/`. Deploy them to Vercel, Netlify, GitHub Pages, or Cloudflare Pages.
+- Static files are in `dist/`.
+- Deploy them to Vercel, Netlify, GitHub Pages, or Cloudflare Pages.
 
-## Usage
 
-1. **Get Book ID**: Go to [Fanqie Novel](https://fanqienovel.com). Find a book. Copy the numeric ID from the URL:
-   ```
-   https://fanqienovel.com/page/123456789?...
-   ```
-   The Book ID is `123456789`.
-
-2. **Start Reading**: Paste the Book ID or URL in the homepage textbox and click "Start Reading".
-
-3. **Pick Up Where You Left Off**: Your history is on the homepage. Click a book and continue from the previous checkpoint.
-
-## Structure
+## 📁 Structure
 
 ```
 src/
@@ -73,12 +94,24 @@ src/
 └── utils/              # Helper functions
 ```
 
-## Notes
-
-- This project is for personal use and learning only. Please don't use it commercially.
 - Inspired by [fanqienovel-book](https://github.com/kailous/fanqienovel-book).
 - API provided by [Fanqie-novel-Downloader](https://github.com/POf-L/Fanqie-novel-Downloader).
 
-## Feedback
 
-Have a question or suggestion? Open an issue on [GitHub](https://github.com/denniemok/fanqie-novel-reader/issues).
+## ⚠️ Notes
+
+> [!IMPORTANT]
+> **Disclaimer**: This project is for personal use only. Do not use it commercially or for any illegal purposes. You are solely responsible for any risks or legal consequences. The author and contributors are not liable for any loss or damage resulting from its use.
+
+- Please follow local laws and the terms of use of the source website.
+- Downloaded content is for personal reading only. Delete files after reading and do not repost or distribute them to respect copyright.
+
+
+## 📄 License
+
+This project is licensed under [CC BY-NC-SA 4.0](LICENSE). You must provide proper attribution, may not use it for commercial purposes, and must share any derivative works under the same license.
+
+
+## 🐞 Feedback
+
+Have a question or suggestion? Open an issue on [GitHub Issues](https://github.com/denniemok/fanqie-novel-reader/issues).
