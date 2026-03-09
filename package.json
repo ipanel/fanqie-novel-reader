@@ -13,6 +13,7 @@
     "lint": "eslint src --ext js,jsx"
   },
   "dependencies": {
+    "localforage": "^1.10.0",
     "lucide-react": "^0.576.0",
     "opencc-js": "^1.0.5",
     "react": "18.2.0",
