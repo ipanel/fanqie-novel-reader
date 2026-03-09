@@ -3,20 +3,20 @@
 <p align="center">
   <img src="https://img.shields.io/github/stars/denniemok/fanqie-novel-reader?style=for-the-badge&color=yellow" alt="Stars">
   <img src="https://img.shields.io/github/v/release/denniemok/fanqie-novel-reader?style=for-the-badge&color=blue" alt="Release">
-  <img src="https://img.shields.io/github/license/denniemok/fanqie-novel-reader?style=for-the-badge&color=green" alt="License">
+  <img src="https://img.shields.io/badge/license-MIT-green.svg?style=for-the-badge" alt="License">
   <img src="https://img.shields.io/badge/demo-fqnr.pages.dev-orange.svg?style=for-the-badge" alt="Demo">
 </p>
 
 **中文 | [English](README.en.md)**
 
-**免註冊、免中國手機號、無廣告的番茄小說線上閱讀器。支援手機 / 平板 / 電腦，提供多章節下載、離線閱讀與 TXT 匯出。**
+**免註冊、免中國手機號、無廣告的番茄小說閱讀器。支援手機 / 平板 / 電腦，提供多章節下載與 TXT 匯出。**
 
-一个免注册、免中国手机号、无广告的番茄小说在线阅读器。支持多章节下载、离线阅读和 TXT 导出，可在手机、平板和电脑上使用。
+一个免注册、免中国手机号、无广告的番茄小说在线阅读器。支持多章节下载和 TXT 导出，可在手机、平板和电脑上使用。
 
-An ad-free Fanqie Novel online reader with no registration or Chinese phone number required. Supports multi-chapter download, offline reading, and TXT export across mobile and desktop devices.
+An ad-free Fanqie Novel online reader with no registration or Chinese phone number required. Supports multi-chapter download and TXT export across mobile and desktop devices.
 
 
-## 🚀 立即使用
+## 📢 立即使用
 
 👉 **線上版（免安裝）**：https://fqnr.pages.dev
 
@@ -69,7 +69,7 @@ npm run dev
 - 應用直接呼叫番茄小說 API，無需後端。
 
 
-## 📦 部署
+## 🚢 部署
 
 ```bash
 npm run build
@@ -104,11 +104,11 @@ src/
 - 下載內容僅供個人閱讀使用，請勿轉載或散布；閱畢請刪除檔案，以尊重著作權。
 
 
-## 📄 授權條款
+## 📋 授權條款
 
-本專案採用 [CC BY-NC-SA 4.0](LICENSE) 授權。使用時請註明出處，禁止商業用途，衍生作品須以相同協議釋出。
+本專案採用 [MIT 授權](LICENSE)。使用本專案原始碼時請保留授權聲明並註明出處。
 
 
-## 🐞 問題回報
+## 💬 問題回報
 
 歡迎至 [GitHub Issues](https://github.com/denniemok/fanqie-novel-reader/issues) 提出建議或回報問題。

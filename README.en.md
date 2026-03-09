@@ -3,13 +3,13 @@
 <p align="center">
   <img src="https://img.shields.io/github/stars/denniemok/fanqie-novel-reader?style=for-the-badge&color=yellow" alt="Stars">
   <img src="https://img.shields.io/github/v/release/denniemok/fanqie-novel-reader?style=for-the-badge&color=blue" alt="Release">
-  <img src="https://img.shields.io/github/license/denniemok/fanqie-novel-reader?style=for-the-badge&color=green" alt="License">
+  <img src="https://img.shields.io/badge/license-MIT-green.svg?style=for-the-badge" alt="License">
   <img src="https://img.shields.io/badge/demo-fqnr.pages.dev-orange.svg?style=for-the-badge" alt="Demo">
 </p>
 
 **[中文](README.md) | English**
 
-An ad-free Fanqie Novel online reader with no registration or Chinese phone number required. Supports multi-chapter download, offline reading, and TXT export across mobile and desktop devices.
+An ad-free Fanqie Novel online reader with no registration or Chinese phone number required. Supports multi-chapter download and TXT export across mobile and desktop devices.
 
 > [!NOTE]
 > This site does not have MTL yet. Use Google Translate or AI translation plugins in your browser as an alternative. **We plan to add MTL in the future — stay tuned!**
@@ -21,7 +21,7 @@ While TomatoMTL is powerful, it requires login and contains ads. FQNR is a light
 </details>
 
 
-## 🚀 Quick Start
+## 📢 Quick Start
 
 👉 Try it here: <https://fqnr.pages.dev>
 
@@ -72,7 +72,7 @@ npm run dev
 - The app calls the Fanqie API directly — no backend needed.
 
 
-## 📦 Deployment
+## 🚢 Deployment
 
 ```bash
 npm run build
@@ -107,11 +107,11 @@ src/
 - Downloaded content is for personal reading only. Delete files after reading and do not repost or distribute them to respect copyright.
 
 
-## 📄 License
+## 📋 License
 
-This project is licensed under [CC BY-NC-SA 4.0](LICENSE). You must provide proper attribution, may not use it for commercial purposes, and must share any derivative works under the same license.
+This project is licensed under the [MIT License](LICENSE). You may use the source code with attribution and include the license notice.
 
 
-## 🐞 Feedback
+## 💬 Feedback
 
 Have a question or suggestion? Open an issue on [GitHub Issues](https://github.com/denniemok/fanqie-novel-reader/issues).
