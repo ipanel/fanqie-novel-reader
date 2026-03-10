@@ -9,7 +9,6 @@ const FooterWrapper = styled.footer`
   margin: 0 auto;
   border-top: var(--retro-border-width) solid var(--border-color);
   font-family: inherit;
-  text-transform: uppercase;
 
   a {
     color: var(--accent-color);

@@ -25,7 +25,7 @@ const ReaderWrapper = styled.div`
     margin-bottom: 1.8em;
     text-align: justify;
     letter-spacing: 0.05em;
-    font-family: ${(p) => p.$fontFamily ?? 'Noto Serif TC, Noto Serif SC, SimSun, PMingLiU, Georgia, serif'};
+    font-family: ${(p) => p.$fontFamily ?? 'Noto Serif TC, PMingLiU, Georgia, serif'};
   }
 
   br {

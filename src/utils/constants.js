@@ -38,11 +38,12 @@ export const API_OPTIONS = [
 
 /** Chinese fonts for reader: { value: CSS font-family, label: display name } */
 export const CHINESE_FONTS = [
-  { value: "'Noto Serif TC', 'Noto Serif SC', 'SimSun', 'PMingLiU', Georgia, serif", label: '系統預設（明體）' },
-  { value: "'Noto Serif SC', serif", label: '思源宋體' },
-  { value: "'SimSun', serif", label: '宋體' },
+  { value: "'Noto Serif TC', 'PMingLiU', Georgia, serif", label: '系統預設' },
+  { value: "'Noto Serif TC', serif", label: '思源宋體' },
   { value: "'PMingLiU', serif", label: '新細明體' },
-  { value: "'Noto Sans SC', sans-serif", label: '思源黑體' },
+  { value: "'STSong', '华文宋体', serif", label: '華文宋體' },
+  { value: "'BiauKai', '標楷體', serif", label: '標楷體' },
+  { value: "'Noto Sans TC', sans-serif", label: '思源黑體' },
   { value: "'Microsoft JhengHei', sans-serif", label: '微軟正黑體' },
 ];
 
