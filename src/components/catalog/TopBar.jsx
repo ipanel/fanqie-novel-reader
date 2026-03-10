@@ -33,8 +33,8 @@ function TopBar({
 }) {
   return (
     <TopBarBase>
-      <HomeButton />
-      <ApiSourceDropdown />
+      <HomeButton title="返回首頁" />
+      <ApiSourceDropdown title="API 來源" />
       {totalPages > 1 && (
         <IconButton
           type="button"
@@ -63,7 +63,7 @@ function TopBar({
       >
         <ArrowUpDown size={20} strokeWidth={2.5} />
       </IconButton>
-      <ConversionDropdown value={conversionMode} onChange={onConversionModeChange} />
+      <ConversionDropdown value={conversionMode} onChange={onConversionModeChange} title="繁簡轉換" />
       <IconButton
         type="button"
         title={hasUncachedChapters ? `批次下載 (${batchSize} 章)` : '全部已下載'}

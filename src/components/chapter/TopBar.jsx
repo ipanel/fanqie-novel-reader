@@ -127,8 +127,8 @@ function TopBar({ chapterData, bookInfo, fontSize, onFontSizeChange, fontFamily,
           {bookInfo && <h3>{convertedBookName}</h3>}
         </TitleBlock>
         <ActionBar>
-            <HomeButton />
-            <ApiSourceDropdown />
+            <HomeButton title="返回首頁" />
+            <ApiSourceDropdown title="API 來源" />
             {onFontSizeChange && (
               <IconButton
                 type="button"
@@ -160,7 +160,7 @@ function TopBar({ chapterData, bookInfo, fontSize, onFontSizeChange, fontFamily,
               />
             )}
             {onConversionModeChange && (
-              <ConversionDropdown value={conversionMode} onChange={onConversionModeChange} />
+              <ConversionDropdown value={conversionMode} onChange={onConversionModeChange} title="繁簡轉換" />
             )}
             {onReaderBackgroundChange && (
               <IconDropdown
@@ -197,7 +197,7 @@ function TopBar({ chapterData, bookInfo, fontSize, onFontSizeChange, fontFamily,
                 <RefreshCw size={20} strokeWidth={2.5} />
               </IconButton>
             )}
-            <CatalogButton bookId={chapterData?.novel_data?.book_id} />
+            <CatalogButton bookId={chapterData?.novel_data?.book_id} title="目錄" />
           </ActionBar>
       </InfoRow>
       <ProgressBox aria-hidden="true">
