@@ -6,6 +6,7 @@ import Reader from '../components/chapter/Reader';
 import Error from '../components/common/Error';
 import Loading from '../components/common/Loading';
 import PageWrapper from '../components/common/PageWrapper';
+import { useToast } from '../contexts/ToastContext';
 import { useConversionMode } from '../hooks/useConversionMode';
 import { useFontSize, useFontFamily, useTextBrightness, useReaderBackground } from '../hooks/useTextSettings';
 import { useChapterLoader } from '../hooks/useChapterLoader';
@@ -18,6 +19,7 @@ function Chapter() {
   const bookId = searchParams.get('bookId');
   
   const { error, chapterData, bookInfo, loading, loadChapter } = useChapterLoader(itemId, bookId);
+  const { showToast } = useToast();
   const [fontSize, handleFontSizeChange] = useFontSize();
   const [fontFamily, handleFontFamilyChange] = useFontFamily();
   const [textBrightness, handleTextBrightnessChange] = useTextBrightness();
@@ -36,6 +38,10 @@ function Chapter() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [itemId]);
+
+  useEffect(() => {
+    if (error) showToast(error);
+  }, [error, showToast]);
 
   if (!itemId) {
     return bookId ? <Navigate to={buildCatalogUrl(bookId)} replace /> : <Navigate to="/" replace />;

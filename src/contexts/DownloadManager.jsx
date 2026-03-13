@@ -65,7 +65,7 @@ export function DownloadManagerProvider({ children }) {
         .then(() => {})
         .catch(() => fetchItem(itemId, { forceRefresh }))
         .catch((err) => {
-          showToast(formatErrorMessage(err, '章節下載失敗，請稍後再試。'), 3500);
+          showToast(formatErrorMessage(err, '章節下載失敗，請稍後再試。'));
           console.error('Chapter download failed:', itemId, err);
         })
         .finally(() => {

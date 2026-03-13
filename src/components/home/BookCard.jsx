@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { List, Loader2, MessageCircle, RefreshCw, Trash2 } from 'lucide-react';
 import Info from '../book/Info';
 import { useBookLoader } from '../../hooks/useBookLoader';
+import { useToast } from '../../contexts/ToastContext';
 
 const spin = keyframes`
   from { transform: rotate(0deg); }
@@ -130,7 +131,12 @@ const ActionButton = styled.button`
 `;
 
 function BookCard({ bookId, actionHint, onClick, onCatalogClick, onCommentClick, onRefreshClick, onDeleteClick, conversionMode }) {
-  const { bookInfo, refetch, isRefreshing } = useBookLoader(bookId, { detailOnly: true });
+  const { bookInfo, refetch, isRefreshing, error } = useBookLoader(bookId, { detailOnly: true });
+  const { showToast } = useToast();
+
+  useEffect(() => {
+    if (error) showToast(error);
+  }, [error, showToast]);
 
   if (!bookInfo) return null;
 

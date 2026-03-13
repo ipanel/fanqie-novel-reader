@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { deleteBookData, getLastReadChapter } from '../../utils/storage';
+import { useToast } from '../../contexts/ToastContext';
 import { useConversionMode } from '../../hooks/useConversionMode';
 import { maybeConvert } from '../../utils/zh-convert';
 import { buildChapterOrCatalogUrl, buildCatalogUrl, buildCommentsUrl } from '../../utils/navigation';
@@ -25,6 +26,7 @@ const ContentWrapper = styled.div`
 
 function Content() {
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const [refreshKey, setRefreshKey] = useState(0);
   const [conversionMode, setConversionMode] = useConversionMode();
 
@@ -53,8 +55,13 @@ function Content() {
     const bookName = bookInfo?.book_info?.original_book_name;
     const convertedName = maybeConvert(bookName, conversionMode) || bookId;
     if (window.confirm(`確定要刪除「${convertedName}」的所有本地資料嗎？`)) {
-      await deleteBookData(bookId);
-      setRefreshKey((k) => k + 1);
+      try {
+        await deleteBookData(bookId);
+        setRefreshKey((k) => k + 1);
+      } catch (err) {
+        console.error('Delete book failed:', err);
+        showToast('刪除失敗，請稍後再試。');
+      }
     }
   };
 

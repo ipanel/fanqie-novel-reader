@@ -68,6 +68,10 @@ function Catalog() {
       setCurrentPage(Math.max(0, totalPages - 1));
     }
   }, [currentPage, totalPages]);
+
+  useEffect(() => {
+    if (error) showToast(error);
+  }, [error, showToast]);
   const hasUncachedChapters = uncachedItemIds.length > 0;
   const anyDownloading = uncachedItemIds.some((id) => isDownloading(id));
   const batchSize = Math.min(MAX_CONCURRENT_DOWNLOADS, uncachedItemIds.length);

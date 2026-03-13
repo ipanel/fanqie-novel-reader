@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
+import { TOAST_DURATION_MS } from '../../utils/constants';
 
 const ToastWrapper = styled.div`
   position: fixed;
   top: calc(80px + env(safe-area-inset-top));
   right: calc(16px + env(safe-area-inset-right));
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
   padding: 12px 20px;
@@ -26,7 +27,7 @@ const ToastWrapper = styled.div`
 const CloseButton = styled.button`
   flex-shrink: 0;
   padding: 0;
-  margin: -4px -4px 0 0;
+  margin: 0;
   background: none;
   border: none;
   color: var(--accent-color);
@@ -41,12 +42,12 @@ const CloseButton = styled.button`
   }
 `;
 
-function Toast({ message, duration = 2000, onExpire }) {
+function Toast({ message, onExpire }) {
   useEffect(() => {
     if (!message || !onExpire) return;
-    const id = setTimeout(onExpire, duration);
+    const id = setTimeout(onExpire, TOAST_DURATION_MS);
     return () => clearTimeout(id);
-  }, [message, duration, onExpire]);
+  }, [message, onExpire]);
 
   if (!message) return null;
 

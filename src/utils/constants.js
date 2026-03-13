@@ -30,7 +30,6 @@ export const ZH_CONVERSION_OPTIONS = [
 
 /** API sources: { value: base URL, label: display name } */
 export const API_OPTIONS = [
-  { value: 'https://bk.yydjtc.cn', label: 'bk.yydjtc.cn' },
   { value: 'https://qkfqapi.vv9v.cn', label: 'qkfqapi.vv9v.cn' },
   { value: 'http://103.236.91.147:9999', label: '103.236.91.147:9999' },
   { value: 'http://101.35.133.34:5000', label: '101.35.133.34:5000' },
@@ -58,6 +57,7 @@ export const TEXT_BRIGHTNESS_DEFAULT = 50;
 export const TEXT_BRIGHTNESS_STEP = 5;
 export const READING_HISTORY_MAX = 50;
 export const MAX_CONCURRENT_DOWNLOADS = 10;
+export const TOAST_DURATION_MS = 2000;
 export const REQUEST_TIMEOUT_MS = 45000;
 export const MAX_ABSTRACT_LENGTH = 180;
 export const MOBILE_ABSTRACT_LENGTH = 45;
