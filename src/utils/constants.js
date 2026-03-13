@@ -32,7 +32,6 @@ export const ZH_CONVERSION_OPTIONS = [
 export const API_OPTIONS = [
   { value: 'https://qkfqapi.vv9v.cn', label: 'qkfqapi.vv9v.cn' },
   { value: 'http://103.236.91.147:9999', label: '103.236.91.147:9999' },
-  { value: 'http://101.35.133.34:5000', label: '101.35.133.34:5000' },
 ];
 
 /** Chinese fonts for reader: { value: CSS font-family, label: display name } */

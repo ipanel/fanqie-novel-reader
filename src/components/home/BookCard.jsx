@@ -62,7 +62,8 @@ const Card = styled.div`
 
 const SpinningIcon = styled.span`
   display: flex;
-  animation: ${spin} 1s steps(8) infinite;
+  will-change: transform;
+  animation: ${spin} 0.8s linear infinite;
 `;
 
 const LoadingOverlay = styled.div`
@@ -79,7 +80,8 @@ const LoadingOverlay = styled.div`
     width: 40px;
     height: 40px;
     color: var(--accent-color);
-    animation: ${spin} 1s steps(8) infinite;
+    will-change: transform;
+    animation: ${spin} 0.8s linear infinite;
   }
 `;
 
