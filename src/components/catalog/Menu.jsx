@@ -169,7 +169,7 @@ function ChapterActions({ item, onChapterDeleted }) {
 
   const getActionTitle = () => {
     if (downloading) return '下載中';
-    if (cached) return '更新章節';
+    if (cached) return '刷新章節';
     return '下載';
   };
 

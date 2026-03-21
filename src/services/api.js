@@ -1,8 +1,8 @@
 import { API_BASE_KEY, API_OPTIONS, REQUEST_TIMEOUT_MS } from '../utils/constants';
-import { safeGetItem, safeSetItem, setLastReadChapter } from '../utils/storage';
+import { safeGetItem, safeSetItem, getUseProxy, setLastReadChapter } from '../utils/storage';
 import { directoryCache, chapterCache, detailCache } from '../utils/cache';
 
-const USE_PROXY = import.meta.env.VITE_USE_PROXY === 'true';
+const PROXY_AVAILABLE = import.meta.env.VITE_USE_PROXY === 'true';
 const DEFAULT_API_BASE = API_OPTIONS[0].value;
 
 export function getApiBase() {
@@ -20,7 +20,7 @@ function getApiType() {
 }
 
 function useProxy(url) {
-  return USE_PROXY && /^https?:\/\//.test(url);
+  return PROXY_AVAILABLE && getUseProxy() && /^https?:\/\//.test(url);
 }
 
 async function fetchWithTimeout(url, options = {}, timeoutMs = REQUEST_TIMEOUT_MS) {

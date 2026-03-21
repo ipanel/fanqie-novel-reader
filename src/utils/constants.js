@@ -2,14 +2,15 @@ export const INDEXEDDB_STORE_NAME = 'fanqie-database';
 export const DIRECTORY_CACHE_KEY = 'fanqie-directory';
 export const CHAPTER_CACHE_KEY = 'fanqie-chapter';
 export const DETAIL_CACHE_KEY = 'fanqie-detail';
-export const API_BASE_KEY = 'fanqie-api-base';
-export const SORT_ORDER_KEY = 'fanqie-sortOrder';
 export const READING_HISTORY_KEY = 'fanqie-readingHistory';
-export const FONT_SIZE_KEY = 'fanqie-fontSize';
-export const FONT_FAMILY_KEY = 'fanqie-fontFamily';
-export const TRADITIONAL_CHINESE_KEY = 'fanqie-traditionalChinese';
-export const TEXT_BRIGHTNESS_KEY = 'fanqie-textBrightness';
-export const READER_BACKGROUND_KEY = 'fanqie-readerBackground';
+export const API_BASE_KEY = 'apiBase';
+export const USE_PROXY_KEY = 'useProxy';
+export const SORT_ORDER_KEY = 'sortOrder';
+export const FONT_SIZE_KEY = 'fontSize';
+export const FONT_FAMILY_KEY = 'fontFamily';
+export const TEXT_BRIGHTNESS_KEY = 'textBrightness';
+export const READER_BACKGROUND_KEY = 'readerBackground';
+export const TRADITIONAL_CHINESE_KEY = 'traditionalChinese';
 
 /** Reader background presets: { value: hex, label } */
 export const READER_BACKGROUND_OPTIONS = [
@@ -31,8 +32,7 @@ export const ZH_CONVERSION_OPTIONS = [
 
 /** API sources: { value: base URL, label: display name, type: 1 or 2 } */
 export const API_OPTIONS = [
-  { value: 'https://qkfqapi.vv9v.cn', label: '基礎服務 1', type: 1 },
-  { value: 'http://103.236.91.147:9999', label: '基礎服務 2', type: 1 },
+  { value: 'https://qkfqapi.vv9v.cn', label: '基礎服務', type: 1 },
   { value: 'https://api-v2.cenguigui.cn/api/tomato', label: '快速章節服務', type: 2 },
 ];
 

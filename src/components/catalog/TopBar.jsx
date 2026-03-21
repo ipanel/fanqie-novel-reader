@@ -3,6 +3,7 @@ import { ArrowUpDown, Bookmark, ChevronLeft, ChevronRight, CloudDownload, Downlo
 import TopBarBase from '../common/TopBarBase';
 import HomeButton, { HOME_BUTTON_TITLE } from '../common/HomeButton';
 import ApiDropdown, { API_DROPDOWN_TITLE } from '../common/ApiDropdown';
+import ProxyButton, { PROXY_BUTTON_TITLE } from '../common/ProxyButton';
 import LangDropdown, { LANG_DROPDOWN_TITLE } from '../common/LangDropdown';
 import { IconButton } from '../common/IconButton';
 import { buildChapterUrl, buildCommentsUrl } from '../../utils/navigation';
@@ -35,6 +36,7 @@ function TopBar({
     <TopBarBase>
       <HomeButton title={HOME_BUTTON_TITLE} />
       <ApiDropdown title={API_DROPDOWN_TITLE} />
+      <ProxyButton title={PROXY_BUTTON_TITLE} />
       {totalPages > 1 && (
         <IconButton
           type="button"
@@ -101,7 +103,7 @@ function TopBar({
       </IconButton>
       <IconButton
         type="button"
-        title="更新目錄"
+        title="刷新目錄"
         onClick={onRefresh}
       >
         <RefreshCw size={20} strokeWidth={2.5} />

@@ -348,13 +348,13 @@ function Info({ bookInfo, conversionMode = 'tw', variant, footer }) {
             <MetaTag className="meta-chapters">{chapter_count ? `共 ${chapter_count} 章節` : '暫無章節資訊'}</MetaTag>
           )}
           {score && (
-            <MetaTag className="meta-score">評分: {score}</MetaTag>
+            <MetaTag className="meta-score">評分 {score}</MetaTag>
           )}
           {category && <MetaTag className="meta-category">{convertedCategory}</MetaTag>}
           {sub_info && <MetaTag className="meta-subinfo">{convertedSubInfo}</MetaTag>}
           {word_number && <MetaTag className="meta-word-number">{convertedWordNumber}字</MetaTag>}
           {creation_status && <MetaTag className="meta-creation-status">{convertedCreationStatus}</MetaTag>}
-          {last_publish_time && <MetaTag className="meta-publish-time">更新: {last_publish_time}</MetaTag>}
+          {last_publish_time && <MetaTag className="meta-publish-time">更新 {last_publish_time}</MetaTag>}
         </MetaRow>
         {!isCompact && footer && <Footer>{footer}</Footer>}
       </TextBlock>
