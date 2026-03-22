@@ -14,7 +14,7 @@ const FooterWrapper = styled.footer`
     color: var(--accent-color);
     text-decoration: none;
     border: 1px solid var(--accent-color);
-    padding: 1px 6px 2px;
+    padding: 0 6px 2px;
     background: var(--background-color2);
     
     &:hover {

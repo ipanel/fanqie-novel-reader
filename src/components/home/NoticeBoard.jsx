@@ -52,7 +52,7 @@ const NoticeCard = styled.div`
     color: var(--accent-color);
     text-decoration: none;
     border: 1px solid var(--accent-color);
-    padding: 0px 6px 1px;
+    padding: 0 6px 2px;
     background: var(--background-color2);
 
     &:hover {
