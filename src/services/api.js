@@ -83,7 +83,8 @@ async function fetchAndValidate(url, options = {}) {
   } catch (parseErr) {
     throw new Error('Invalid response from server');
   }
-  if (json.code !== 200) throw new Error('Failed to fetch data');
+  const valid = (json.code !== undefined && json.code === 200) || (json.success !== undefined && json.success === true);
+  if (!valid) throw new Error('Failed to fetch data');
   return json;
 }
 
