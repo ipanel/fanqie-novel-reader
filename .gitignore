@@ -25,3 +25,6 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# proxy functions (deployed separately to multiple CF Pages)
+/functions
