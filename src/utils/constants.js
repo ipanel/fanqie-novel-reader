@@ -50,6 +50,7 @@ export const PROXY_URLS = [
 export const API_OPTIONS = [
   { value: 'basic-1', label: '基礎服務 1' },
   { value: 'basic-2', label: '基礎服務 2' },
+  { value: 'basic-3', label: '基礎服務 3' },
 ];
 
 /** Chinese fonts for reader: { value: CSS font-family, label: display name } */
