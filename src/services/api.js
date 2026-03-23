@@ -1,4 +1,4 @@
-import { API_BASE_KEY, API_OPTIONS, REQUEST_TIMEOUT_MS } from '../utils/constants';
+import { API_BASE_KEY, API_OPTIONS, REQUEST_TIMEOUT_MS, RATE_LIMIT_RPM } from '../utils/constants';
 import { safeGetItem, safeSetItem, setLastReadChapter } from '../utils/storage';
 import { directoryCache, chapterCache, detailCache } from '../utils/cache';
 
@@ -44,6 +44,31 @@ function getFetchUrl(action, params) {
   return buildProxyUrl(action, params);
 }
 
+const RATE_LIMIT_WINDOW_MS = 60_000;
+let rateLimitTail = Promise.resolve();
+const rateLimitTimestamps = [];
+
+function trimOldTimestamps(cutoff) {
+  let i = 0;
+  while (i < rateLimitTimestamps.length && rateLimitTimestamps[i] <= cutoff) i++;
+  rateLimitTimestamps.splice(0, i);
+}
+
+async function waitForRateLimit() {
+  rateLimitTail = rateLimitTail.then(async () => {
+    const now = Date.now();
+    trimOldTimestamps(now - RATE_LIMIT_WINDOW_MS);
+    while (rateLimitTimestamps.length >= RATE_LIMIT_RPM) {
+      const oldest = rateLimitTimestamps[0];
+      const waitMs = Math.max(0, oldest + RATE_LIMIT_WINDOW_MS - Date.now() + 1);
+      await new Promise((r) => setTimeout(r, waitMs));
+      trimOldTimestamps(Date.now() - RATE_LIMIT_WINDOW_MS);
+    }
+    rateLimitTimestamps.push(Date.now());
+  });
+  await rateLimitTail;
+}
+
 async function fetchWithTimeout(fetchUrl, options = {}, timeoutMs = REQUEST_TIMEOUT_MS) {
   const controller = new AbortController();
   let timedOut = false;
@@ -80,6 +105,7 @@ async function fetchWithTimeout(fetchUrl, options = {}, timeoutMs = REQUEST_TIME
 }
 
 async function fetchAndValidate(url, options = {}) {
+  await waitForRateLimit();
   const res = await fetchWithTimeout(url, options);
   if (!res.ok) throw new Error('Failed to fetch data');
   let json;

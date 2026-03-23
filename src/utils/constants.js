@@ -62,5 +62,6 @@ export const BATCH_COOLDOWN_MS = 5000;
 export const RETRY_DELAY_MS = 5000;
 export const TOAST_DURATION_MS = 2000;
 export const REQUEST_TIMEOUT_MS = 45000;
+export const RATE_LIMIT_RPM = 60;
 export const MAX_ABSTRACT_LENGTH = 180;
 export const MOBILE_ABSTRACT_LENGTH = 45;
