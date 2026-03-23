@@ -29,23 +29,6 @@ export const ZH_CONVERSION_OPTIONS = [
   { value: 'hk', label: '香港繁體' },
 ];
 
-/**
- * External proxy URLs for round-robin. Deploy proxy to multiple CF Pages and add base URLs here.
- * When non-empty, requests use these instead of same-origin /proxy.
- */
-export const PROXY_URLS = [
-  'https://proxy-1.fanqietc.workers.dev',
-  'https://proxy-2.fanqietc.workers.dev',
-  'https://proxy-3.fanqietc.workers.dev',
-  'https://proxy-4.fanqietc.workers.dev',
-  'https://proxy-5.fanqietc.workers.dev',
-  'https://proxy-6.fanqietc.workers.dev',
-  'https://proxy-7.fanqietc.workers.dev',
-  'https://proxy-8.fanqietc.workers.dev',
-  'https://proxy-9.fanqietc.workers.dev',
-  'https://proxy-10.fanqietc.workers.dev',
-];
-
 /** API sources: { value: opaque ID (used with proxy), label: display name } — real URLs live in proxy only */
 export const API_OPTIONS = [
   { value: 'basic-1', label: '基礎服務 1' },

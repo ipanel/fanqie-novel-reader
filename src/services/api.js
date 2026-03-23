@@ -1,7 +1,12 @@
-import { API_BASE_KEY, API_OPTIONS, PROXY_URLS, REQUEST_TIMEOUT_MS } from '../utils/constants';
+import { API_BASE_KEY, API_OPTIONS, REQUEST_TIMEOUT_MS } from '../utils/constants';
 import { safeGetItem, safeSetItem, setLastReadChapter } from '../utils/storage';
 import { directoryCache, chapterCache, detailCache } from '../utils/cache';
 
+/** Proxy URLs for round-robin. Set VITE_PROXY_URLS (comma-separated) in .env. */
+const PROXY_URLS = (import.meta.env.VITE_PROXY_URLS ?? '')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean);
 const DEFAULT_API_BASE = API_OPTIONS[0].value;
 
 export function getApiBase() {
