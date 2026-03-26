@@ -80,7 +80,7 @@ function NoticeBoard() {
         <b>2026-03-09</b> | 章節快取已升級至 IndexedDB，不再受 localStorage 容量限制，可下載更多章節。
       </NoticeCard>
       <NoticeCard>
-        <b>2026-03-25</b> | 已修正最新第三方 API 服務不可用問題。<br />
+        <b>2026-03-27</b> | 站長於例行檢查時發現快速服務已恢復，本站已重新啟用該服務。<br />
         最近第三方 API 服務限流較嚴，服務偶有中斷，敬請見諒。<br />
         站長會持續關注狀況，若有問題歡迎至 <a href="https://github.com/denniemok/fanqie-novel-reader/issues" target="_blank" rel="noopener noreferrer">Issues</a> 回報。<br />
       </NoticeCard>
