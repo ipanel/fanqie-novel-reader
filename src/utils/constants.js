@@ -31,6 +31,7 @@ export const ZH_CONVERSION_OPTIONS = [
 
 /** API sources: { value: opaque ID (used with proxy), label: display name } — real URLs live in proxy only */
 export const API_OPTIONS = [
+  { value: 'basic-1', label: '基本服務' },
   { value: 'basic-2', label: '快速服務' },
 ];
 
