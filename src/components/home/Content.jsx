@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { flushSync } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { deleteBookData, moveReadingHistoryBook } from '../../utils/storage';
@@ -29,6 +30,7 @@ function Content() {
   const navigate = useNavigate();
   const { showToast } = useToast();
   const [refreshKey, setRefreshKey] = useState(0);
+  const [, setBookshelfRenderTick] = useState(0);
   const [conversionMode, setConversionMode] = useConversionMode();
 
   const goToCatalog = (bookId) => navigate(buildCatalogUrl(bookId));
@@ -43,8 +45,12 @@ function Content() {
   };
 
   const handleReorderBook = (bookId, direction) => {
+    const scrollY = window.scrollY;
     moveReadingHistoryBook(bookId, direction);
-    setRefreshKey((k) => k + 1);
+    flushSync(() => {
+      setBookshelfRenderTick((k) => k + 1);
+    });
+    window.scrollTo(0, scrollY);
   };
 
   const handleDeleteBook = async (e, bookId, bookInfo) => {
@@ -66,7 +72,6 @@ function Content() {
     <ContentWrapper>
       <NoticeBoard />
       <Bookshelf
-        refreshKey={refreshKey}
         onBookClick={handleBookClick}
         onCommentClick={handleCommentClick}
         onReorderBook={handleReorderBook}

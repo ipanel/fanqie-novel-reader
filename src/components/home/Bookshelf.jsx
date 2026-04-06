@@ -35,14 +35,14 @@ const SectionTitle = styled.h2`
   }
 `;
 
-function Bookshelf({ refreshKey, onBookClick, onCommentClick, onReorderBook, onDeleteClick, conversionMode }) {
+function Bookshelf({ onBookClick, onCommentClick, onReorderBook, onDeleteClick, conversionMode }) {
   const readingHistory = getReadingHistory();
   const isSampleOnly = readingHistory.length === 0;
   const displayHistory =
     isSampleOnly ? [{ bookId: SAMPLE_READING_HISTORY_BOOK_ID }] : readingHistory;
 
   return (
-    <Section key={refreshKey}>
+    <Section>
       <SectionTitle><BookOpen /> 閱讀歷史</SectionTitle>
       {displayHistory.map(({ bookId }, index) => (
           <BookCard
