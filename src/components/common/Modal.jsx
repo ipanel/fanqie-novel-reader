@@ -14,11 +14,13 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalContent = styled.div`
+  box-sizing: border-box;
+  width: 560px;
+  max-width: 100%;
   background: var(--background-color);
   border: var(--retro-border-width) solid var(--border-color);
   border-radius: 0;
   padding: 24px;
-  max-width: 560px;
   max-height: 70vh;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;

@@ -312,7 +312,6 @@ function Info({ bookInfo, conversionMode = 'tw', variant, footer }) {
   const fullAbstract = cleanAbstract(convertedAbstract);
   const maxLen = isMobile ? MOBILE_ABSTRACT_LENGTH : MAX_ABSTRACT_LENGTH;
   const truncated = truncateText(fullAbstract, maxLen);
-  const isLong = fullAbstract.length > maxLen;
   const isCompact = variant === 'compact';
 
   if (!original_book_name && !author) return null;
@@ -321,7 +320,7 @@ function Info({ bookInfo, conversionMode = 'tw', variant, footer }) {
 
   return (
     <InfoWrapper className={wrapperClass}>
-{audio_thumb_uri && (
+      {audio_thumb_uri && (
           <CoverWrapper>
           <img src={audio_thumb_uri} alt="書籍封面" width="128" height="128" />
           <CoverMeta>
@@ -336,7 +335,7 @@ function Info({ bookInfo, conversionMode = 'tw', variant, footer }) {
         </TitleBlock>
         {tags && <Tags>{convertedTags}</Tags>}
         <Abstract>
-          {!isCompact && isLong && (
+          {!isCompact && (
             <ShowMore type="button" onClick={() => setShowFullAbstract(true)}>
               展開
             </ShowMore>
