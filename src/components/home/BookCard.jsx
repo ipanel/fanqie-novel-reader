@@ -118,7 +118,7 @@ const ActionButton = styled.button`
           : p.$variant === 'bookmark'
             ? '#aa55aa'
             : p.$variant === 'reorderUp'
-              ? '#6688aa'
+              ? '#7d7d7d'
               : p.$variant === 'reorderDown'
                 ? '#aa8866'
                 : 'var(--background-color2)'};
