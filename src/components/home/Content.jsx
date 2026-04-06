@@ -6,7 +6,7 @@ import { deleteBookData, moveReadingHistoryBook } from '../../utils/storage';
 import { useToast } from '../../contexts/ToastContext';
 import { useConversionMode } from '../../hooks/useConversionMode';
 import { maybeConvert } from '../../utils/zh-convert';
-import { buildCatalogUrl, buildCommentsUrl } from '../../utils/navigation';
+import { buildCatalogUrl } from '../../utils/navigation';
 import { formatErrorMessage } from '../../utils/errors';
 import Bookshelf from './Bookshelf';
 import AddBook from './AddBook';
@@ -39,11 +39,6 @@ function Content() {
 
   const handleBookClick = goToCatalog;
 
-  const handleCommentClick = (e, bookId) => {
-    e.stopPropagation();
-    navigate(buildCommentsUrl(bookId));
-  };
-
   const handleReorderBook = (bookId, direction) => {
     const scrollY = window.scrollY;
     moveReadingHistoryBook(bookId, direction);
@@ -73,7 +68,6 @@ function Content() {
       <NoticeBoard />
       <Bookshelf
         onBookClick={handleBookClick}
-        onCommentClick={handleCommentClick}
         onReorderBook={handleReorderBook}
         onDeleteClick={handleDeleteBook}
         conversionMode={conversionMode}

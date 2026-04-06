@@ -35,7 +35,7 @@ const SectionTitle = styled.h2`
   }
 `;
 
-function Bookshelf({ onBookClick, onCommentClick, onReorderBook, onDeleteClick, conversionMode }) {
+function Bookshelf({ onBookClick, onReorderBook, onDeleteClick, conversionMode }) {
   const readingHistory = getReadingHistory();
   const isSampleOnly = readingHistory.length === 0;
   const displayHistory =
@@ -50,7 +50,6 @@ function Bookshelf({ onBookClick, onCommentClick, onReorderBook, onDeleteClick, 
             bookId={bookId}
             actionHint="前往目錄"
             onClick={() => onBookClick(bookId)}
-            onCommentClick={(e) => onCommentClick?.(e, bookId)}
             reorderEnabled={!isSampleOnly}
             canMoveUp={index > 0}
             canMoveDown={index < displayHistory.length - 1}

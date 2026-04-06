@@ -1,12 +1,9 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
-import { ArrowDown, ArrowUp, Bookmark, Loader2, MessageCircle, RefreshCw, Trash2 } from 'lucide-react';
+import { ArrowDown, ArrowUp, Loader2, RefreshCw, Trash2 } from 'lucide-react';
 import Info from '../book/Info';
 import { useBookLoader } from '../../hooks/useBookLoader';
 import { useToast } from '../../contexts/ToastContext';
-import { getLastReadChapter } from '../../utils/storage';
-import { buildChapterUrl } from '../../utils/navigation';
 
 const spin = keyframes`
   from { transform: rotate(0deg); }
@@ -111,17 +108,13 @@ const ActionButton = styled.button`
   background-color: ${(p) =>
     p.$variant === 'delete'
       ? '#aa5555'
-      : p.$variant === 'comment'
-        ? '#55aa55'
-        : p.$variant === 'refresh'
-          ? '#5588aa'
-          : p.$variant === 'bookmark'
-            ? '#aa55aa'
-            : p.$variant === 'reorderUp'
-              ? '#7d7d7d'
-              : p.$variant === 'reorderDown'
-                ? '#aa8866'
-                : 'var(--background-color2)'};
+      : p.$variant === 'refresh'
+        ? '#5588aa'
+        : p.$variant === 'reorderUp'
+          ? '#aa55aa'
+          : p.$variant === 'reorderDown'
+            ? '#55aa55'
+            : 'var(--background-color2)'};
   color: ${(p) => (p.$variant ? '#000' : 'var(--text-color)')};
   box-shadow: 2px 2px 0px var(--background-color);
 
@@ -151,7 +144,6 @@ function BookCard({
   bookId,
   actionHint,
   onClick,
-  onCommentClick,
   onRefreshClick,
   onDeleteClick,
   conversionMode,
@@ -160,20 +152,12 @@ function BookCard({
   canMoveDown,
   onReorderBook,
 }) {
-  const navigate = useNavigate();
   const { bookInfo, refetch, isRefreshing, error } = useBookLoader(bookId, { detailOnly: true });
   const { showToast } = useToast();
 
   useEffect(() => {
     if (error) showToast(error);
   }, [error, showToast]);
-
-  const bookmarkItemId = getLastReadChapter(bookId);
-
-  const handleBookmarkClick = (e) => {
-    e.stopPropagation();
-    navigate(buildChapterUrl(bookmarkItemId, bookId));
-  };
 
   if (!bookInfo) return null;
 
@@ -214,28 +198,6 @@ function BookCard({
               <ArrowDown />
             </ActionButton>
           </>
-        )}
-        {bookmarkItemId && (
-          <ActionButton
-            type="button"
-            $variant="bookmark"
-            onClick={handleBookmarkClick}
-            title="章節書籤（上次閱讀）"
-            aria-label="前往章節書籤"
-          >
-            <Bookmark />
-          </ActionButton>
-        )}
-        {onCommentClick && (
-          <ActionButton
-            type="button"
-            $variant="comment"
-            onClick={(e) => { e.stopPropagation(); onCommentClick(e); }}
-            title="評論"
-            aria-label="查看評論"
-          >
-            <MessageCircle />
-          </ActionButton>
         )}
         <ActionButton
           type="button"
