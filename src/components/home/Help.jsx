@@ -136,7 +136,7 @@ function Help() {
           <h3>獲取書籍 ID</h3>
           <p>在小說詳情頁的網址中找到那一串數字：</p>
           <div className="code-box">
-            .../page/<span>123456789</span>?...
+            ...fanqienovel.com/page/<span>123456789</span>?...
           </div>
         </HelpCard>
       </HelpGrid>
