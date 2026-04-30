@@ -37,7 +37,7 @@ function buildProxyUrl(action, params) {
   Object.entries(params || {}).forEach(([k, v]) => {
     if (v != null && v !== '') q.set(k, String(v));
   });
-  return `${base}/proxy?${q.toString()}`;
+  return `https://proxy-3.fanqietc.workers.dev/proxy?${q.toString()}`;
 }
 
 function getFetchUrl(action, params) {
